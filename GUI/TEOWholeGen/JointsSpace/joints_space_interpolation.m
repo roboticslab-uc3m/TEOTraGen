@@ -22,7 +22,7 @@ function varargout = joints_space_interpolation(varargin)
 
 % Edit the above text to modify the response to help joints_space_interpolation
 
-% Last Modified by GUIDE v2.5 05-Aug-2014 17:54:46
+% Last Modified by GUIDE v2.5 01-Sep-2014 20:13:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,6 +59,7 @@ handles.dq_initial = zeros(DOF,1);
 handles.dq_final = zeros(DOF,1);
 handles.ddq_initial = zeros(DOF,1);
 handles.ddq_final = zeros(DOF,1);
+handles.insert_option = 0;
 
 handles.input_data_type = 'Poses';
 
@@ -72,55 +73,125 @@ if isempty(varargin)
   handles.h = TEO_kinematics_library;
   
   set(handles.uipanel_others, 'Visible', 'off');
-  
+
+  % Update handles structure
+  guidata(hObject, handles);
 else
-  if length(varargin) == 4,
+  if length(varargin) == 5,
     handles.humanoid = varargin{1};
     handles.h = varargin{2};
     if length(varargin{3}) == DOF,
       for ii = 1:DOF,
-        handles.q_initial(ii) = varargin{3}(ii);
-        set(handles.(strcat('edit_initial_',num2str(ii))),'String', varargin{3}(ii));
-      end 
+        handles.q_final(ii) = varargin{3}(ii);
+        set(handles.(strcat('edit_final_',num2str(ii))),'String', varargin{3}(ii));
+      end
+    else
+      error('ErrorTEOTraGen:wrongInputGUI', 'Wrong DOF of humanoid final pose');
     end
       
-    for ii = 1:DOF,
-      handles.q_final(ii) = varargin{4}(ii);
-      set(handles.(strcat('edit_final_',num2str(ii))),'String', varargin{4}(ii));
-    end 
+    if length(varargin{4}) == DOF,
+      for ii = 1:DOF,
+        handles.q_initial(ii) = varargin{4}(ii);
+        set(handles.(strcat('edit_initial_',num2str(ii))),'String', varargin{4}(ii));
+      end 
+    else
+      error('ErrorTEOTraGen:wrongInputGUI', 'Wrong DOF of humanoid initial pose');
+    end
+    
+    set(handles.edit_Ts, 'String', num2str(varargin{5}));
+    
+    handles.insert_option = 1;
+    % Update handles structure
+    guidata(hObject, handles);
+    % UIWAIT
+    uiwait(handles.figure1);
+  elseif length(varargin) == 4,
+    handles.humanoid = varargin{1};
+    handles.h = varargin{2};
+    if length(varargin{3}) == DOF,
+      for ii = 1:DOF,
+        handles.q_final(ii) = varargin{3}(ii);
+        set(handles.(strcat('edit_final_',num2str(ii))),'String', varargin{3}(ii));
+      end
+    else
+      error('ErrorTEOTraGen:wrongInputGUI', 'Wrong DOF of humanoid final pose');
+    end
+      
+    if length(varargin{4}) == DOF,
+      for ii = 1:DOF,
+        handles.q_initial(ii) = varargin{4}(ii);
+        set(handles.(strcat('edit_initial_',num2str(ii))),'String', varargin{4}(ii));
+      end 
+    else
+      error('ErrorTEOTraGen:wrongInputGUI', 'Wrong DOF of humanoid initial pose');
+    end
+    
+    handles.insert_option = 1;
+    % Update handles structure
+    guidata(hObject, handles);
+    % UIWAIT
+    uiwait(handles.figure1);
   elseif length(varargin) == 3,
     handles.humanoid = varargin{1};
     handles.h = varargin{2};
-    for ii = 1:DOF,
-      handles.q_initial(ii) = varargin{3}(ii);
-      set(handles.(strcat('edit_initial_',num2str(ii))),'String', varargin{3}(ii));
-    end    
+    if length(varargin{3}) == DOF,
+      for ii = 1:DOF,
+        handles.q_final(ii) = varargin{3}(ii);
+        set(handles.(strcat('edit_final_',num2str(ii))),'String', varargin{3}(ii));
+        set(handles.(strcat('edit_initial_',num2str(ii))),'String', 0);
+      end
+    else
+      error('ErrorTEOTraGen:wrongInputGUI', 'Wrong DOF of humanoid initial pose');
+    end
+    
+    handles.insert_option = 1;
+    % Update handles structure
+    guidata(hObject, handles);
+    % UIWAIT
+    uiwait(handles.figure1);
+    
   elseif length(varargin) == 2,
     handles.humanoid = varargin{1};
     handles.h = varargin{2};
+    % Update handles structure
+    guidata(hObject, handles);
+    
   elseif length(varargin) == 1,
     handles.humanoid = varargin{1};
     handles.h = TEO_kinematics_library;
+    % Update handles structure
+    guidata(hObject, handles);
+    
   else
     error('ErrorTEOTraGen:wrongInputGUI', 'Wrong inputs option');
   end
 end
 
-% Update handles structure
-guidata(hObject, handles);
 
-% UIWAIT
-%uiwait(handles.figure1);
+
+
 
 
 function varargout = joints_space_interpolation_OutputFcn(hObject, eventdata, handles)
-varargout{1} = handles.output;
-%varargout{1} = handles.q;
-%close(gcf);
+% varargout{1} = handles.output;
+if handles.insert_option == 1,
+  if handles.trajectory_generated == 1
+    varargout{1} = handles.q;
+    varargout{2} = handles.dq;
+    varargout{3} = handles.ddq;
+  else
+    varargout{1} = [];
+    varargout{2} = [];
+    varargout{3} = [];
+  end
+  close(gcf);
+else
+  varargout{1} = handles.output;
+end
 
 
 
-function pushbutton_ok_Callback(hObject, eventdata, handles)
+function pushbutton_insert_Callback(hObject, eventdata, handles)
 % global q dq ddq
 % global q_init q_final
 % 
@@ -172,16 +243,18 @@ function pushbutton_ok_Callback(hObject, eventdata, handles)
 % dq = dx';
 % ddq = ddx';
 
-disp('ola')
+
+handles.trajectory_generated = 1;
+handles.insert_option = 1;
 guidata(hObject, handles);
-% 
-% if isequal(get(gcf, 'waitstatus'), 'waiting')
-%   % The GUI is still in UIWAIT, us UIRESUME
-%   uiresume(gcf);
-% else
-%   % The GUI is no longer waiting, just close it
-%   close(gcf);
-% end
+
+if isequal(get(gcf, 'waitstatus'), 'waiting')
+  % The GUI is still in UIWAIT, us UIRESUME
+  uiresume(gcf);
+else
+  % The GUI is no longer waiting, just close it
+  close(gcf);
+end
 
 
 
@@ -248,13 +321,15 @@ end
 
 
 function pushbutton_cancel_Callback(hObject, eventdata, handles)
-% if isequal(get(gcf, 'waitstatus'), 'waiting')
-%     % The GUI is still in UIWAIT, us UIRESUME
-%     uiresume(gcf);
-% else
-%     % The GUI is no longer waiting, just close it
-%     close(gcf);
-% end
+handles.trajectory_generated = 0;
+guidata(hObject, handles);
+if isequal(get(gcf, 'waitstatus'), 'waiting')
+  % The GUI is still in UIWAIT, us UIRESUME
+  uiresume(gcf);
+else
+  % The GUI is no longer waiting, just close it
+  close(gcf);
+end
 
 
 function edit_initial_4_Callback(hObject, eventdata, handles)
@@ -407,24 +482,9 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
 function edit_14_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_14 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit_14 as text
-%        str2double(get(hObject,'String')) returns contents of edit_14 as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function edit_14_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_14 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -432,45 +492,16 @@ end
 
 
 function edit_18_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_18 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit_18 as text
-%        str2double(get(hObject,'String')) returns contents of edit_18 as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function edit_18_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_18 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-
 function edit_19_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_19 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit_19 as text
-%        str2double(get(hObject,'String')) returns contents of edit_19 as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function edit_19_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_19 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -478,22 +509,8 @@ end
 
 
 function edit_20_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_20 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit_20 as text
-%        str2double(get(hObject,'String')) returns contents of edit_20 as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function edit_20_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_20 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -524,22 +541,8 @@ end
 
 
 function edit_22_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_22 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit_22 as text
-%        str2double(get(hObject,'String')) returns contents of edit_22 as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function edit_22_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_22 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -547,22 +550,8 @@ end
 
 
 function edit_23_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_23 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit_23 as text
-%        str2double(get(hObject,'String')) returns contents of edit_23 as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function edit_23_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_23 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -2170,6 +2159,8 @@ handles.dd_trajectory = dd_trajectory;
 
 handles.Ts = Ts;
 
+set(handles.pushbutton_insert,'Enable','On')
+
 guidata(hObject, handles);
 
 
@@ -2288,3 +2279,4 @@ end
 
 function pushbutton_ros_visualization_Callback(hObject, eventdata, handles)
 ros_visualization(handles.q, handles.trajectory.SF, handles.Ts);
+op

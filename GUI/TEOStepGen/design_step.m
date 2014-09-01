@@ -1043,7 +1043,7 @@ function menu_others_Callback(hObject, eventdata, handles)
 
 
 % --------------------------------------------------------------------
-function whole_vody_plot_Callback(hObject, eventdata, handles)
+function whole_body_plot_Callback(hObject, eventdata, handles)
 global TEO
 
 global trajectory d_trajectory dd_trajectory
@@ -1057,4 +1057,37 @@ trajectories.joints.q = q;
 trajectories.joints.dq = dq;
 trajectories.joints.ddq = ddq;
 
- trajectory_plots(trajectories.operational, trajectories.joints, TEO);
+trajectory_plots(trajectories.operational, trajectories.joints, TEO);
+
+
+function Untitled_9_Callback(hObject, eventdata, handles)
+
+
+function relative_position_Callback(hObject, eventdata, handles)
+global TEO h 
+global trajectory d_trajectory dd_trajectory
+global q dq ddq
+global data
+
+prevq = q;
+prevdq = dq;
+prevddq = ddq;
+
+[newq, newdq, newddq] = joints_space_interpolation(TEO, h, q(:,1), zeros(26,1), data.Ts);
+
+if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
+  q = [newq prevq];
+  dq = [newq prevdq];
+  ddq = [newq prevddq];
+  handles.result.q = q;
+  handles.result.dq = dq;
+  handles.result.ddq = ddq;
+  
+  handles.result.trajectory.time = 0:data.Ts:(data.Ts*size(q,2)-data.Ts);
+  
+  guidata(hObject,handles)
+  
+  % Show plots
+  set(handles.plot_options, 'Visible', 'On')
+  plot_all_graphs(hObject,handles,'PLOT SPACE') % Show joints space by default
+end
