@@ -9,6 +9,13 @@ Autor: Domingo Esteban
 Leganes - Madrid - Spain
 
 
+GIT Branches
+============
+
+- The master branch is updated with the latest version of packages.
+- The development branch contains the main development of new versions.
+
+
 INSTRUCTIONS
 ============
 
