@@ -1073,7 +1073,7 @@ prevq = q;
 prevdq = dq;
 prevddq = ddq;
 
-[newq, newdq, newddq] = joints_space_interpolation(TEO, h, q(:,1), zeros(26,1), data.Ts);
+[newq, newdq, newddq, support_foot] = joints_space_interpolation(TEO, h, q(:,1), zeros(26,1), data.Ts);
 
 if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
   q = [newq prevq];
@@ -1083,7 +1083,9 @@ if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
   handles.result.dq = dq;
   handles.result.ddq = ddq;
   
+  handles.result.trajectory.SF = [support_foot handles.result.trajectory.SF];
   handles.result.trajectory.time = 0:data.Ts:(data.Ts*size(q,2)-data.Ts);
+  
   
   guidata(hObject,handles)
   

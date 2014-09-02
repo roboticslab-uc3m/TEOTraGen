@@ -179,10 +179,12 @@ if handles.insert_option == 1,
     varargout{1} = handles.q;
     varargout{2} = handles.dq;
     varargout{3} = handles.ddq;
+    varargout{4} = handles.sf;
   else
     varargout{1} = [];
     varargout{2} = [];
     varargout{3} = [];
+    varargout{4} = [];
   end
   close(gcf);
 else
@@ -2159,6 +2161,26 @@ handles.dd_trajectory = dd_trajectory;
 
 handles.Ts = Ts;
 
+% Support foot
+if ~isnumeric(support_foot),
+  switch support_foot
+    case 'Double Support'
+      support_foot = 0;
+    case 'Right Foot Support'
+      support_foot = 1;
+    case 'Left Foot Support'
+      support_foot = -1;
+    otherwise
+      error('ErrorTEOTraGen:wrongInputGUI', 'Wrong support_foot value');
+  end
+else
+  if ~((support_foot == 0) || (support_foot == 1) || (support_foot == -1))
+    error('ErrorTEOTraGen:wrongInputGUI', 'Wrong support_foot value');
+  end
+end
+
+handles.sf = support_foot*ones(1,size(q,2));
+
 set(handles.pushbutton_insert,'Enable','On')
 
 guidata(hObject, handles);
@@ -2279,4 +2301,3 @@ end
 
 function pushbutton_ros_visualization_Callback(hObject, eventdata, handles)
 ros_visualization(handles.q, handles.trajectory.SF, handles.Ts);
-op
