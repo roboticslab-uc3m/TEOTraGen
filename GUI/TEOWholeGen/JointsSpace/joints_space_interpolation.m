@@ -22,7 +22,7 @@ function varargout = joints_space_interpolation(varargin)
 
 % Edit the above text to modify the response to help joints_space_interpolation
 
-% Last Modified by GUIDE v2.5 01-Sep-2014 20:13:36
+% Last Modified by GUIDE v2.5 09-Sep-2014 17:45:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -2301,3 +2301,22 @@ end
 
 function pushbutton_ros_visualization_Callback(hObject, eventdata, handles)
 ros_visualization(handles.q, handles.trajectory.SF, handles.Ts);
+
+
+% --------------------------------------------------------------------
+function Back_Callback(hObject, eventdata, handles)
+% hObject    handle to Back (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function back_teowholegen_Callback(hObject, eventdata, handles)
+% TEOWholeGen
+close (gcf)
+TEOWholeGen
+
+% --------------------------------------------------------------------
+function main_menu_Callback(hObject, eventdata, handles)
+close (gcf)
+TEOTraGen

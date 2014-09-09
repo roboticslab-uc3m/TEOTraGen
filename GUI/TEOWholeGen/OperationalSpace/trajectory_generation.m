@@ -22,7 +22,7 @@ function varargout = trajectory_generation(varargin)
 
 % Edit the above text to modify the response to help trajectory_generation
 
-% Last Modified by GUIDE v2.5 24-Jul-2014 18:34:19
+% Last Modified by GUIDE v2.5 09-Sep-2014 18:23:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -350,7 +350,7 @@ if check_T_values(handles) == 1,
   [trajectories.operational.trajectory trajectories.operational.d_trajectory trajectories.operational.dd_trajectory] = generate_trajectory(trajectories.operational.trajectory, trajectories.operational.d_trajectory, trajectories.operational.dd_trajectory, data.trajectory_points, data.trajectory_settings.total_points, data.trajectory_settings);
 
   set([handles.save_joint_button, handles.pushbutton_ros_visualization, handles.pushbutton_matlab_visualization],'Enable','off')
-  set([handles.save_operational_button handles.gen_joint_button handles.axis_movement_pushbutton handles.pushbutton_plots],'Enable','on')
+  set([handles.gen_joint_button handles.axis_movement_pushbutton handles.pushbutton_plots],'Enable','on')
 
   set(handles.label_points,'String','Trajectory Generation Complete!');
   set(handles.label_points,'BackGroundColor',[0.702 0.78 1]);
@@ -504,7 +504,8 @@ end
 current.position.p0 = PO(1:3,1);
 current.orientation.a0 = PO(4:6,1);
 set(handles.operational_panel,'Visible','on');
-set([handles.save_operational_button handles.gen_joint_button],'Enable','on');
+% set(handles.save_operational_button ,'Visible','on');
+set(handles.gen_joint_button ,'Visible','on');
 
 guidata(hObject,handles)
 
@@ -612,7 +613,7 @@ close trajectory_generation
 
 
 function trajectory_settings_Callback(hObject, eventdata, handles)
-settings_trajectory_generation
+% settings_trajectory_generation
 close (gcf)
 settings_trajectory_generation
 
@@ -1322,8 +1323,99 @@ function tools_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --------------------------------------------------------------------
-function Untitled_2_Callback(hObject, eventdata, handles)
-% hObject    handle to Untitled_2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+function relative_position_conversion_Callback(hObject, eventdata, handles)
+global data trajectories
+
+prevq = trajectories.joints.q;
+prevdq = trajectories.joints.dq;
+prevddq = trajectories.joints.ddq;
+
+[newq, newdq, newddq, support_foot] = joints_space_interpolation(data.trajectory_settings.TEO, data.trajectory_settings.h, trajectories.joints.q(:,1), zeros(26,1), data.trajectory_settings.parameters.Ts);
+
+if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
+  trajectories.joints.q = [newq prevq];
+  trajectories.joints.dq = [newdq prevdq];
+  trajectories.joints.ddq = [newddq prevddq];
+  
+  trajectories.operational.trajectory.SF = [support_foot trajectories.operational.trajectory.SF];
+  trajectories.operational.trajectory.time = 0:data.trajectory_settings.parameters.Ts:(data.trajectory_settings.parameters.Ts*size(trajectories.joints.q,2)-data.trajectory_settings.parameters.Ts);
+end
+
+
+% --- Executes on button press in pushbutton_reset_trajectories.
+function pushbutton_reset_trajectories_Callback(hObject, eventdata, handles)
+
+global data trajectories
+
+trajectories.operational = data.trajectory_settings.initial;
+trajectories.Inertialtrajectories = data.trajectory_settings.Iinitial;
+
+% Default layout
+set([handles.data_panel handles.operational_panel], 'Visible','off');
+% set([handles.save_operational_button handles.gen_joint_button ],'Enable','off');
+set([handles.diff_pos_button handles.abs_pos_button handles.diff_orient_button handles.abs_orient_button handles.diff_time_button handles.abs_time_button],'Value',0);
+set(handles.Ts_val,'String', data.trajectory_settings.parameters.Ts);
+set([handles.save_operational_button handles.gen_joint_button handles.axis_movement_pushbutton handles.pushbutton_plots handles.save_joint_button handles.pushbutton_matlab_visualization handles.pushbutton_ros_visualization],'Enable','off')
+
+% Enable/Disable generation for corresponding humanoid part
+if data.trajectory_settings.body_parts.CoM == 0
+    set(handles.CoM_button,'Enable','off');
+    disp('Disable CoM generation');
+end
+if data.trajectory_settings.body_parts.RF == 0
+    set(handles.RF_button,'Enable','off');
+    disp('Disable RF generation');
+end
+if data.trajectory_settings.body_parts.LF == 0
+    set(handles.LF_button,'Enable','off');
+    disp('Disable LF generation');
+end
+if data.trajectory_settings.body_parts.RH == 0
+    set(handles.RH_button,'Enable','off');
+    disp('Disable RH generation');
+end
+if data.trajectory_settings.body_parts.LH == 0
+    set(handles.LH_button,'Enable','off');
+    disp('Disable LH generation');
+end
+
+set(handles.Waist_button,'Enable','off'); % Disable for now...
+
+% Enable default GUI objects
+set ([handles.diff_pos_button, handles.diff_orient_button, handles.diff_time_button handles.support_popup], 'Value', 1.0)
+set(handles.CoM_button, 'Value', 0)  % Avoid CoM_button be pressed
+
+% At least one one point in total_points
+data.trajectory_settings.total_points = 1;
+set (handles.num_points_text, 'String', num2str(data.trajectory_settings.total_points))
+
+data.trajectory_points.input_type = 'Poses';
+% humanoid_part_to_plot = 'RH';
+
+% Create initial values
+for jj = 1:(length(data.trajectory_settings.humanoid_fields)-1)
+  data.trajectory_points.initial_point.(data.trajectory_settings.humanoid_fields(jj).name) = zeros(data.trajectory_settings.humanoid_fields(jj).size, 1);
+  data.trajectory_points.initial_velocity.(data.trajectory_settings.humanoid_fields(jj).name) = zeros(data.trajectory_settings.humanoid_fields(jj).size, 1);
+  data.trajectory_points.initial_acceleration.(data.trajectory_settings.humanoid_fields(jj).name) = zeros(data.trajectory_settings.humanoid_fields(jj).size, 1);
+  data.trajectory_points.final_point.(data.trajectory_settings.humanoid_fields(jj).name) = zeros(data.trajectory_settings.humanoid_fields(jj).size, 1);
+  data.trajectory_points.final_velocity.(data.trajectory_settings.humanoid_fields(jj).name) = zeros(data.trajectory_settings.humanoid_fields(jj).size, 1);
+  data.trajectory_points.final_acceleration.(data.trajectory_settings.humanoid_fields(jj).name) = zeros(data.trajectory_settings.humanoid_fields(jj).size, 1);  
+  data.trajectory_points.t0_val.(data.trajectory_settings.humanoid_fields(jj).name) = 0;
+  data.trajectory_points.T_val.(data.trajectory_settings.humanoid_fields(jj).name) = 0;
+  data.trajectory_points.Ts_val.(data.trajectory_settings.humanoid_fields(jj).name) = data.trajectory_settings.parameters.Ts;
+  data.trajectory_points.pos_diff.(data.trajectory_settings.humanoid_fields(jj).name){1} = 'Diff';
+  data.trajectory_points.orient_diff.(data.trajectory_settings.humanoid_fields(jj).name){1} = 'Diff';
+  data.trajectory_points.time_diff.(data.trajectory_settings.humanoid_fields(jj).name){1} = 'Diff';
+  data.trajectory_points.interpola_pos.(data.trajectory_settings.humanoid_fields(jj).name){1} = 'Linear';
+  data.trajectory_points.interpola_orient.(data.trajectory_settings.humanoid_fields(jj).name){1} = 'Linear';
+  data.trajectory_points.support_foot.(data.trajectory_settings.humanoid_fields(jj).name) = 0; % Double support
+end
+
+
+% Update handles structure   
+guidata(hObject, handles);
+
+num_points_text_Callback(handles.num_points_text, eventdata, handles);
+
+% Update handles structure   
+guidata(hObject, handles);

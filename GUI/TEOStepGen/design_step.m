@@ -835,8 +835,8 @@ end
 
 
 % --------------------------------------------------------------------
-function Untitled_7_Callback(hObject, eventdata, handles)
-% hObject    handle to Untitled_7 (see GCBO)
+function ang_vel_acc_csv_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to ang_vel_acc_csv_menu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -1077,8 +1077,8 @@ prevddq = ddq;
 
 if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
   q = [newq prevq];
-  dq = [newq prevdq];
-  ddq = [newq prevddq];
+  dq = [newdq prevdq];
+  ddq = [newddq prevddq];
   handles.result.q = q;
   handles.result.dq = dq;
   handles.result.ddq = ddq;
@@ -1093,3 +1093,70 @@ if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
   set(handles.plot_options, 'Visible', 'On')
   plot_all_graphs(hObject,handles,'PLOT SPACE') % Show joints space by default
 end
+
+
+% --------------------------------------------------------------------
+function ang_vel_acc_save_teo_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  dQ = handles.result.dq;
+  ddQ = handles.result.ddq;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  %dQtext = [dQ(1:6,:);dQ(14:17,:);dQ(7:12,:);dQ(19:22,:);dQ(13,:);zeros(1,n);dQ(18,:)];
+  %ddQtext = [ddQ(1:6,:);ddQ(14:17,:);ddQ(7:12,:);ddQ(19:22,:);ddQ(13,:);zeros(1,n);ddQ(18,:)];
+  try
+  [file1,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file1, 'w');
+    fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                   [Q(6,:); Q(5,:); Q(4,:); Q(3,:); Q(2,:); Q(1,:); Q(7:end,:)]);
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+
+  try
+    [file2,path] = uiputfile('*.csv','Save Joint Velocities as');
+    csvid = fopen(file2, 'w');
+    fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                 [dQ(6,:); dQ(5,:); dQ(4,:); dQ(3,:); dQ(2,:); dQ(1,:); dQ(7:end,:)]);
+    fclose(csvid);
+  catch
+    disp('Save joint velocities *.csv aborted');
+  end
+
+  try
+    [file3,path] = uiputfile('*.csv','Save Joint Accelerations as');
+    csvid = fopen(file3, 'w');
+    fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                 [ddQ(6,:); ddQ(5,:); ddQ(4,:); ddQ(3,:); ddQ(2,:); ddQ(1,:); ddQ(7:end,:)]);
+    fclose(csvid);
+  catch
+    disp('Save joint accelerations *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+
+
+% --------------------------------------------------------------------
+function angles_save_teo_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  try
+  [file,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file, 'w');
+  fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                   [Q(6,:); Q(5,:); Q(4,:); Q(3,:); Q(2,:); Q(1,:); Q(7:end,:)]);
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+guidata(hObject,handles)

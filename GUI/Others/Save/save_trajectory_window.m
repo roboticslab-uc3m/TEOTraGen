@@ -60,6 +60,9 @@ else
     handles.save_q = varargin{2};
     handles.save_dq = varargin{3};
     handles.save_ddq = varargin{4};
+    handles.save_traj = [];
+    handles.save_dtraj = [];
+    handles.save_ddtraj = [];
     handles.trajectory_space = varargin{5};
     handles.trajectory_to_save{1} = 'q';
     handles.trajectory_to_save{2} = 'dq';
@@ -104,54 +107,62 @@ end
 % --- Executes on button press in save_pushbutton.
 function save_pushbutton_Callback(hObject, eventdata, handles)
 option = get(handles.format_popup,'Value');
-global q dq ddq
-try
-    if option == 1 % .csv format - Comma
-        [m,n] = size(q);
-        [file1,path] = uiputfile([handles.traj_name_string '_q.csv'], 'Save Joint Angles as');
-        csvid = fopen(file1, 'w');
-        fprintf(csvid, '%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f\n', q);
-        fclose(csvid);
 
-        [file2,path] = uiputfile([handles.traj_name_string '_dq.csv'], 'Save Joint Velocities as');
-        csvid = fopen(file2, 'w');
-        fprintf(csvid, '%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f\n', dq);
-        fclose(csvid);
+if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles.save_ddtraj))
+  q = handles.save_q;
+  dq = handles.save_dq;
+  ddq = handles.save_ddq;
 
-        [file3,path] = uiputfile([handles.traj_name_string '_ddq.csv'], 'Save Joint Accelerations as');
-        csvid = fopen(file3, 'w');
-        fprintf(csvid, '%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f\n', ddq);
-        fclose(csvid);
+  try
+      if option == 1 % .csv format - Comma
+          [m,n] = size(q);
+          [file1,path] = uiputfile([handles.traj_name_string '_q.csv'], 'Save Joint Angles as');
+          csvid = fopen(file1, 'w');
+          fprintf(csvid, '%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f\n', q);
+          fclose(csvid);
 
-    elseif option == 2 % .txt format
-        for i = 1:3
-          data_to_save = handles.(strcat('save_', handles.trajectory_to_save{i}));
-%           [m,n] = size(Q);
-          Q = data_to_save';
-          [file, path] = uiputfile([handles.traj_name_string '_' handles.trajectory_to_save{i} '.txt'],['Save ' handles.trajectory_to_save{i} ' as:']);
-          dlmwrite(file, Q, 'delimiter','\t','precision','%.4f')
-        end
-    elseif option == 3 % Custom format
-        [m,n] = size(q);
-        [file1,path] = uiputfile([handles.traj_name_string '_q.csv'], 'Save Joint Angles as');
-        csvid = fopen(file1, 'w');
-        fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
-                                                                                                                                   [q(6,:); q(5,:); q(4,:); q(3,:); q(2,:); q(1,:); q(7:end,:)]);
-        fclose(csvid);
+          [file2,path] = uiputfile([handles.traj_name_string '_dq.csv'], 'Save Joint Velocities as');
+          csvid = fopen(file2, 'w');
+          fprintf(csvid, '%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f\n', dq);
+          fclose(csvid);
 
-        [file2,path] = uiputfile([handles.traj_name_string '_dq.csv'], 'Save Joint Velocities as');
-        csvid = fopen(file2, 'w');
-        fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
-                                                                                                                                   [dq(6,:); dq(5,:); dq(4,:); dq(3,:); dq(2,:); dq(1,:); dq(7:end,:)]);
-        fclose(csvid);
+          [file3,path] = uiputfile([handles.traj_name_string '_ddq.csv'], 'Save Joint Accelerations as');
+          csvid = fopen(file3, 'w');
+          fprintf(csvid, '%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f,%1.4f\n', ddq);
+          fclose(csvid);
 
-        [file3,path] = uiputfile([handles.traj_name_string '_ddq.csv'], 'Save Joint Accelerations as');
-        csvid = fopen(file3, 'w');
-        fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
-                                                                                                                                   [ddq(6,:); ddq(5,:); ddq(4,:); ddq(3,:); ddq(2,:); ddq(1,:); ddq(7:end,:)]);
-        fclose(csvid);      
-    end
-catch
-    disp('Save trajectories/joints canceled');
+      elseif option == 2 % .txt format
+          for i = 1:3
+            data_to_save = handles.(strcat('save_', handles.trajectory_to_save{i}));
+  %           [m,n] = size(Q);
+            Q = data_to_save';
+            [file, path] = uiputfile([handles.traj_name_string '_' handles.trajectory_to_save{i} '.txt'],['Save ' handles.trajectory_to_save{i} ' as:']);
+            dlmwrite(file, Q, 'delimiter','\t','precision','%.4f')
+          end
+      elseif option == 3 % Custom format
+          [m,n] = size(q);
+          [file1,path] = uiputfile([handles.traj_name_string '_q.csv'], 'Save Joint Angles as');
+          csvid = fopen(file1, 'w');
+          fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                     [q(6,:); q(5,:); q(4,:); q(3,:); q(2,:); q(1,:); q(7:end,:)]);
+          fclose(csvid);
+
+          [file2,path] = uiputfile([handles.traj_name_string '_dq.csv'], 'Save Joint Velocities as');
+          csvid = fopen(file2, 'w');
+          fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                     [dq(6,:); dq(5,:); dq(4,:); dq(3,:); dq(2,:); dq(1,:); dq(7:end,:)]);
+          fclose(csvid);
+
+          [file3,path] = uiputfile([handles.traj_name_string '_ddq.csv'], 'Save Joint Accelerations as');
+          csvid = fopen(file3, 'w');
+          fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                     [ddq(6,:); ddq(5,:); ddq(4,:); ddq(3,:); ddq(2,:); ddq(1,:); ddq(7:end,:)]);
+          fclose(csvid);      
+      end
+  catch
+      disp('Save trajectories/joints canceled');
+  end
+else
+  disp('Save operational trajectory no implemented');
 end
 close(gcf)

@@ -196,8 +196,6 @@ Ts = handles.trajectory_settings.parameters.Ts;
 % trajectory = insert_trajectory(trajectory, handles.trajectory_settings.humanoid_fields, create_trajectory_structure(pose_RH, Ts, 0), 'RH');
 % trajectory = insert_trajectory(trajectory, handles.trajectory_settings.humanoid_fields, create_trajectory_structure(pose_LH, Ts, 0), 'LH');
 % 
-handles.trajectory_settings.initial = trajectory;
-handles.trajectory_settings.Iinitial = Itrajectory;
 
 trajectories.trajectory = trajectory;
 trajectories.d_trajectory = d_trajectory;
@@ -205,6 +203,9 @@ trajectories.dd_trajectory = dd_trajectory;
 Inertialtrajectories.Itrajectory = Itrajectory;
 Inertialtrajectories.d_Itrajectory = d_Itrajectory;
 Inertialtrajectories.dd_Itrajectory = dd_Itrajectory;
+
+handles.trajectory_settings.initial = trajectories;
+handles.trajectory_settings.Iinitial = Inertialtrajectories;
 
 % Save gui parameters
 guidata(hObject,handles)
