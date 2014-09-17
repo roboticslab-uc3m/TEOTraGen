@@ -45,12 +45,12 @@ set(handles.plot_options, 'Visible', 'Off')
 % Choose default command line output for design_step
 handles.output = hObject;
 
-handles.interpola_DS1='Linear';
-handles.interpola_DS2='Linear';
-handles.interpola_SS_com='Linear';
-handles.interpola_SS_ff='Linear';
-handles.interpola_RH='Linear';
-handles.interpola_LH='Linear';
+handles.interpola_DS1='Polynomial5';
+handles.interpola_DS2='Polynomial5';
+handles.interpola_SS_com='Polynomial5';
+handles.interpola_SS_ff='Polynomial5';
+handles.interpola_RH='Polynomial5';
+handles.interpola_LH='Polynomial5';
 
 
 if isempty(varargin)
@@ -63,6 +63,15 @@ if isempty(varargin)
     handles.Input_data.Leg = 'Right Leg';
     handles.Input_data.L_val = 0.05;
     handles.Input_data.H_val = 0.03;
+    
+   handles.Input_data.q0=[0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;... % Right Leg
+     0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397;...                     % Left Leg
+     0.0349065850398866; 0;...                                                                                                      % Waist
+     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                        % Right Arm
+     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                            % Left Arm 
+%      1.57079632679490; -0.167017153300893; 0; -0.734875474523928; 0; 0;                                                             % Right Arm
+%      1.57079632679490; 0.167017153300893; 0;  -0.734875474523928; 0; 0];                                                            % Left Arm   
+    
 %     handles.Input_data.q0=[0; 0.00325683448936741; -0.308647699300050;...
 %             0.796421295515307; -0.487773596215257; 0.0278918646012491;...
 %             0; 0.00325683448936741; -0.311486990906165;...
@@ -71,14 +80,6 @@ if isempty(varargin)
 %             1.57079632679490; -0.167017153300893; 0; -0.734875474523928;...
 %             0; 1.57079632679490; 0.167017153300893; 0;...
 %              -0.734875474523928; 0;0;0;0];
-   handles.Input_data.q0=[0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;... % Right Leg
-     0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397;...                     % Left Leg
-     0.0349065850398866; 0;...                                                                                                      % Waist
-     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                        % Right Arm
-     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                            % Left Arm 
-%      1.57079632679490; -0.167017153300893; 0; -0.734875474523928; 0; 0;                                                             % Right Arm
-%      1.57079632679490; 0.167017153300893; 0;  -0.734875474523928; 0; 0];                                                            % Left Arm   
-%     handles.Input_data.q0=ones(26,1)*0.000001;
 
 else
     handles.Input_data = varargin{:};
