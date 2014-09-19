@@ -49,8 +49,10 @@ global h TEO pvia
     humanoid_fields = humanoid_operational_fields(); 
     
     
-switch data.DS_or_SS
-    case 'Double and Simple' % Double Support followed by Simple Support movement
+    % DOMINGO: Ya no va a haber Simple Support, Sólo Double and Simple
+    
+% switch data.DS_or_SS
+%     case 'Double and Simple' % Double Support followed by Simple Support movement
       % Calculate the time of step's phases
       alpha_ds = data.alpha_ds;   % Percentage of time for double support
       alpha_ss = (1-alpha_ds);   % Percentage of time for simple support
@@ -81,56 +83,56 @@ switch data.DS_or_SS
       [trajectory, d_trajectory, dd_trajectory] = move_double_support (delta_ds_com2, Ts, [TDS2; Tend], trajectory, d_trajectory, dd_trajectory,delta.interpola_CoM_DS1);
 
       % Generate trajectory for the arms
-      [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('RH', delta_RH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory,delta.interpola_RH);
-      [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('LH', delta_LH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory,delta.interpola_RH);
+      [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('RH', delta_RH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory, delta.interpola_RH);
+      [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('LH', delta_LH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory, delta.interpola_RH);
       
       % Inverse Differential Kinematics Algorithm with left foot
       [q, dq, ddq] = inverse_ds_ss_jacobian_quat(q0, trajectory, d_trajectory, h);
       %[q, dq, ddq] = inverse_ds_ss_jacobian_quat_second_order(q0, trajectory, d_trajectory, dd_trajectory, h);
         
-    case 'Simple' % Only Simple Support movement
-        
-        alpha_ds = 0;
-        TDS1 = 0;
-        TSS = T;
-
-        delta_ds_com1 = zeros(6,1);
-        
-%         switch support_foot % In Simple Support
+%     case 'Simple' % Only Simple Support movement
+%         
+%         alpha_ds = 0;
+%         TDS1 = 0;
+%         TSS = T;
 % 
-%           case 'Right Leg' % Right Leg
-% 
-            % Initial positions
-            trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_RF(q0)), Ts, Tinit), 'RF');
-            trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LF(q0)), Ts, Tinit), 'LF');
-            trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_RH(q0)), Ts, Tinit), 'RH');
-            trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LH(q0)), Ts, Tinit), 'LH');
-
-            [trajectory, d_trajectory, dd_trajectory] = move_simple_support (delta_ss_com, delta_ss_ff, Ts, [TDS1;TDS1+TSS/2;T], trajectory, d_trajectory, dd_trajectory, support_foot,delta.interpola_CoM_SS,delta.interpola_FF_SS); % Support on Right foot
-%             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('RH',delta_RH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_RH);
-%             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('LH',delta_LH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_LH);
-
-%             [q, dq, ddq] = inverse_right_ss_TEO(q0, trajectory, d_trajectory, dd_trajectory, h);
-% 
-%           case 'Left Leg' % Left Leg
-% 
+%         delta_ds_com1 = zeros(6,1);
+%         
+% %         switch support_foot % In Simple Support
+% % 
+% %           case 'Right Leg' % Right Leg
+% % 
 %             % Initial positions
-% 
-%             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LF(q0)), Ts, Tinit), 'LF');% esto pa ver una cosa
+%             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_RF(q0)), Ts, Tinit), 'RF');
+%             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LF(q0)), Ts, Tinit), 'LF');
 %             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_RH(q0)), Ts, Tinit), 'RH');
 %             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LH(q0)), Ts, Tinit), 'LH');
 % 
-%             [trajectory, d_trajectory, dd_trajectory] = move_simple_support (delta_ss_com, delta_ss_ff, Ts, [TDS1;TDS1+TSS/2;T], trajectory, d_trajectory, dd_trajectory,'Simple Support LF',delta.interpola_CoM_SS,delta.interpola_FF_SS); 
+%             [trajectory, d_trajectory, dd_trajectory] = move_simple_support (delta_ss_com, delta_ss_ff, Ts, [TDS1;TDS1+TSS/2;T], trajectory, d_trajectory, dd_trajectory, support_foot,delta.interpola_CoM_SS,delta.interpola_FF_SS); % Support on Right foot
+% %             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('RH',delta_RH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_RH);
+% %             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('LH',delta_LH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_LH);
 % 
-%             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('RH',delta_RH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_RH);
-%             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('LH',delta_LH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_LH);
-% 
-%             [q, dq, ddq] = inverse_left_ss_TEO(q0, trajectory, d_trajectory, dd_trajectory, h);
-% 
-% 
-%         end
-        
-        [q, dq, ddq] = inverse_ss_jacobian_quat(q0, trajectory, d_trajectory, h);
-        
-end
+% %             [q, dq, ddq] = inverse_right_ss_TEO(q0, trajectory, d_trajectory, dd_trajectory, h);
+% % 
+% %           case 'Left Leg' % Left Leg
+% % 
+% %             % Initial positions
+% % 
+% %             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LF(q0)), Ts, Tinit), 'LF');% esto pa ver una cosa
+% %             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_RH(q0)), Ts, Tinit), 'RH');
+% %             trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(pose_quat2rpy(h.CoM_T_LH(q0)), Ts, Tinit), 'LH');
+% % 
+% %             [trajectory, d_trajectory, dd_trajectory] = move_simple_support (delta_ss_com, delta_ss_ff, Ts, [TDS1;TDS1+TSS/2;T], trajectory, d_trajectory, dd_trajectory,'Simple Support LF',delta.interpola_CoM_SS,delta.interpola_FF_SS); 
+% % 
+% %             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('RH',delta_RH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_RH);
+% %             [trajectory, d_trajectory, dd_trajectory] = moving_arm ('LH',delta_LH,zeros(6,1),zeros(6,1),Ts, [Tinit T], trajectory, d_trajectory, dd_trajectory,delta.interpola_LH);
+% % 
+% %             [q, dq, ddq] = inverse_left_ss_TEO(q0, trajectory, d_trajectory, dd_trajectory, h);
+% % 
+% % 
+% %         end
+%         
+%         [q, dq, ddq] = inverse_ss_jacobian_quat(q0, trajectory, d_trajectory, h);
+%         
+% end
 

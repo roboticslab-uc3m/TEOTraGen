@@ -31,225 +31,161 @@ end
 
 % --- Executes just before design_step is made visible.
 function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to design_step (see VARARGIN)
-% Choose default command line output for design_step
-global h TEO data
+  global data
 
-% Hide plot_options panel
-set(handles.plot_options, 'Visible', 'Off')
+  % Hide plot_options panel
+  set(handles.plot_options, 'Visible', 'Off')
 
-% Choose default command line output for design_step
-handles.output = hObject;
+  % Choose default command line output for design_step
+  handles.output = hObject;
 
-handles.interpola_DS1='Polynomial5';
-handles.interpola_DS2='Polynomial5';
-handles.interpola_SS_com='Polynomial5';
-handles.interpola_SS_ff='Polynomial5';
-handles.interpola_RH='Polynomial5';
-handles.interpola_LH='Polynomial5';
-
-
-if isempty(varargin)
+  % Assign Input Data
+  if isempty(varargin)
     % Default values
-    handles.Input_data.Ts_val = 0.02;
-    handles.Input_data.T_val = 4;  
-    handles.Input_data.alpha_ds = 1/3;
-    handles.Input_data.alpha_sf = 0.2;
-    handles.Input_data.DS_or_SS = 'Double and Simple';
-    handles.Input_data.Leg = 'Right Leg';
-    handles.Input_data.L_val = 0.05;
-    handles.Input_data.H_val = 0.03;
-    
-   handles.Input_data.q0=[0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;... % Right Leg
-     0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397;...                     % Left Leg
-     0.0349065850398866; 0;...                                                                                                      % Waist
-     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                        % Right Arm
-     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                            % Left Arm 
-%      1.57079632679490; -0.167017153300893; 0; -0.734875474523928; 0; 0;                                                             % Right Arm
-%      1.57079632679490; 0.167017153300893; 0;  -0.734875474523928; 0; 0];                                                            % Left Arm   
-    
-%     handles.Input_data.q0=[0; 0.00325683448936741; -0.308647699300050;...
-%             0.796421295515307; -0.487773596215257; 0.0278918646012491;...
-%             0; 0.00325683448936741; -0.311486990906165;...
-%             0.796421295515307;...
-%             -0.484850796032492; -0.0354911450764397; 0.0349065850398866;...
-%             1.57079632679490; -0.167017153300893; 0; -0.734875474523928;...
-%             0; 1.57079632679490; 0.167017153300893; 0;...
-%              -0.734875474523928; 0;0;0;0];
+    handles.Input_data.Ts_val   = 0.01;
+    handles.Input_data.T_val    = 2;  
+    handles.Input_data.alpha_ds = 0.5;
+    handles.Input_data.gamma_com = 0.4;
+    handles.Input_data.Leg      = 'Right Leg';
+    handles.Input_data.L_val    = 0.1;
+    handles.Input_data.H_val    = 0.08;
 
-else
-    handles.Input_data = varargin{:};
-end
+    handles.Input_data.q0 = [ 0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;  ... % Right Leg
+                              0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397; ... % Left Leg
+                              0.0349065850398866; 0; ...                                                                                  % Waist
+                              0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                     % Right Arm
+                              0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
+  else
+  	handles.Input_data = varargin{:};
+  end
 
-% Define some default values
-handles.parameters.kp = 0.01;
-handles.parameters.ko = pi/8;
-handles.result = 0;
-
-
-% Assign Input Data
-% L = handles.Input_data.L_val;
-% H = handles.Input_data.H_val;
-q0 = handles.Input_data.q0;
-Leg = handles.Input_data.Leg;
-%set(handles.text1_design,'String',Leg);
-DS_or_SS = handles.Input_data.DS_or_SS;
-% alpha_sf = handles.Input_data.alpha_sf;
-
-% Load TEO Kinematics Library and Structure
-h = TEO_kinematics_library;
-TEO = TEO_structure('numeric', 'rad', 'm'); 
-handles.humanoid_structure = TEO;
-data = []; % Its value change when a step is generated
-
-if strcmp(DS_or_SS,'Simple')
-    %set(handles.DS1_data_panel,'Visible','off');
-    set(handles.delta_x_CoM_DS1,'Enable','inactive');
-    set(handles.delta_y_CoM_DS1,'Enable','inactive');
-    set(handles.delta_z_CoM_DS1,'Enable','inactive');
-    set(handles.interpolaDS1,'Enable','inactive');
-    set(handles.interpolaDS2,'Enable','inactive');
-    %children = get(handles.uipanelDelta_CoM_DS1,'Children');
-    %children = get(handles.DS1_data_panel,'Children');
-    %set(children,'Enable','inactive');
-    %children = get(handles.uipanelDS1_interpolation,'Children');
-    %set(children,'Enable','inactive');
-    %set(handles.text2_design,'String','No Double Support');
-    set(handles.DS1_data_panel,'Title','No Double Support');
-else
-    set(handles.DS1_data_panel,'Visible','on');
-end
-
-
-
-
-% Assign support_foot variable
-switch Leg
-  case 'Right Leg' % Support on right foot
-    support_foot = 'RF';
-
-  case 'Left Leg' % Support on left foot
-    support_foot = 'LF';    
-end
-
-% Pre-evaluate delta x and delta y CoM in Double Support
-pre_evaluate_delta_com_ds(hObject, handles, support_foot, h, TEO, q0);
-
-% Update title
-set(handles.text_title,'String',strcat('DESIGN STEP - ', ' ', Leg,' Support'));
-
-handles.support_foot = support_foot;
-
-
-% Pre-evaluate foot deltas in Simple and Double Support
-pre_evaluate_delta_foot(hObject, handles);
-% L = handles.Input_data.L_val;
-% H = handles.Input_data.H_val;
-% alpha_sf = handles.Input_data.alpha_sf;
-% 
-% X1_SF = L*alpha_sf/2;
-% set(handles.delta_x_CoM_SS1,'String',num2str(X1_SF),'BackgroundColor','red');
-% X2_SF = L*alpha_sf;
-% set(handles.delta_x_CoM_SS2,'String',num2str(X2_SF),'BackgroundColor','red');
-% 
-% X1_FF = L*(1-alpha_sf)/2;
-% set(handles.delta_x_FF_SS1,'String',num2str(X1_FF),'BackgroundColor','red');
-% set(handles.delta_z_FF_SS1,'String',num2str(H),'BackgroundColor','red');
-% 
-% X2_FF = L*(1-alpha_sf);
-% set(handles.delta_x_FF_SS2,'String',num2str(X2_FF),'BackgroundColor','red');
-
-
-% Pre-evaluate delta x and delta y Arm in Simple Support
-pre_evaluate_delta_arm_ss(hObject, handles, support_foot);
-
-
-graphstab = uitabpanel(...
-  'Parent',handles.panel_graphics,...
-  'Style','popup',...
-  'Units','normalized',...
-  'Position',[0,0,1,1],...
-  'FrameBackgroundColor',[0.078,0.169,0.549],...
-  'FrameBorderType','etchedin',...
-  'Title',{'Right Leg','Left Leg','Torso','Right Arm','Left Arm','CoM'},...
-  'PanelHeights',[59.5,59.5,50,59.5,59.5,50],...
-  'HorizontalAlignment','left',...
-  'FontWeight','bold',...
-  'TitleBackgroundColor',[0.078,0.169,0.549],...
-  'TitleForegroundColor',[1 1 1],...
-  'PanelBackgroundColor',[0.702,0.78,1],...
-  'PanelBorderType','line','SelectedItem',6);
-
-hpanel = getappdata(graphstab,'panels');
-
-
-
-% *******************************
-
-   handles.sd_graph = axes('Parent',getappdata(graphstab,'status'),...
-    'Units','normalized',...
-      'Position',[0.3,0.1,0.4,0.9],'Box','on'); 
+  % Define some default values
+  handles.interpola_DS1     = 'Polynomial5';
+  handles.interpola_DS2     = 'Polynomial5';
+  handles.interpola_SS_com  = 'Polynomial5';
+  handles.interpola_SS_ff   = 'Polynomial5';
+  handles.interpola_RH      = 'Polynomial5';
+  handles.interpola_LH      = 'Polynomial5';
   
-   % Ejes para mostrar el valor de las articulaciones de la pierna derecha
-   handles.axes1 = axes('Parent',hpanel(1),'Position',[.1 .6 .25 .25]);
-   handles.axes2 = axes('Parent',hpanel(1),'Position',[.4 .6 .25 .25]);
-   handles.axes3 = axes('Parent',hpanel(1),'Position',[.7 .6 .25 .25]);
-   handles.axes4 = axes('Parent',hpanel(1),'Position',[.1 .15 .25 .25]);
-   handles.axes5 = axes('Parent',hpanel(1),'Position',[.4 .15 .25 .25]);
-   handles.axes6 = axes('Parent',hpanel(1),'Position',[.7 .15 .25 .25]);
-   
-   % Ejes para mostrar el valor de las articulaciones de la pierna
-   % izquierda
-   handles.axes7 = axes('Parent',hpanel(2),'Position',[.1 .6 .25 .25]);
-   handles.axes8 = axes('Parent',hpanel(2),'Position',[.4 .6 .25 .25]);
-   handles.axes9 = axes('Parent',hpanel(2),'Position',[.7 .6 .25 .25]);
-   handles.axes10 = axes('Parent',hpanel(2),'Position',[.1 .15 .25 .25]);
-   handles.axes11 = axes('Parent',hpanel(2),'Position',[.4 .15 .25 .25]);
-   handles.axes12 = axes('Parent',hpanel(2),'Position',[.7 .15 .25 .25]);
-   
-   % Ejes para mostrar el valor de las articulaciones del torso
-   handles.axes13 = axes('Parent',hpanel(3),'Position',[.1 .6 .25 .25]);
-   handles.axes14 = axes('Parent',hpanel(3),'Position',[.7 .6 .25 .25]);   
-   
-   % Ejes para mostrar el valor de las articulaciones del brazo derecho
-   handles.axes15 = axes('Parent',hpanel(4),'Position',[.1 .6 .25 .25]);
-   handles.axes16 = axes('Parent',hpanel(4),'Position',[.4 .6 .25 .25]);
-   handles.axes17 = axes('Parent',hpanel(4),'Position',[.7 .6 .25 .25]);
-   handles.axes18 = axes('Parent',hpanel(4),'Position',[.1 .15 .25 .25]);
-   handles.axes19 = axes('Parent',hpanel(4),'Position',[.4 .15 .25 .25]);
-   handles.axes20 = axes('Parent',hpanel(4),'Position',[.7 .15 .25 .25]);
-   
-   % Ejes para mostrar el valor de las articulaciones del brazo izquierdo
-   handles.axes21 = axes('Parent',hpanel(5),'Position',[.1 .6 .25 .25]);
-   handles.axes22 = axes('Parent',hpanel(5),'Position',[.4 .6 .25 .25]);
-   handles.axes23 = axes('Parent',hpanel(5),'Position',[.7 .6 .25 .25]);
-   handles.axes24 = axes('Parent',hpanel(5),'Position',[.1 .15 .25 .25]);
-   handles.axes25 = axes('Parent',hpanel(5),'Position',[.4 .15 .25 .25]);
-   handles.axes26 = axes('Parent',hpanel(5),'Position',[.7 .15 .25 .25]);
+  handles.parameters.kp = 0.01;
+  handles.parameters.ko = pi/8;
+  handles.result = 0;
 
-   
-   % Ejes para mostrar el valor del CoM
-   handles.axes_zmp = axes('Parent',hpanel(6),'Position',[.2 .2 .6 .6]);
-   %handles.axes_robot_plot = axes('Parent',hpanel(6),'Position',[.2 .2 .6 .6]);
-   
-   % Ejes para mostrar la imagen de TEO
-   axes(handles.sd_graph)
-   [r,map] = imread('teo_photo2.jpg','jpg');
-   image(r);colormap(map);axis off
-   
-   axes(handles.axes_zmp)
-   [r,map] = imread('teo_photo2.jpg','jpg');
-   image(r);colormap(map);axis off
+  % Load TEO Kinematics Library and Structure
+  handles.h   = TEO_kinematics_library;
+  handles.humanoid_structure = TEO_structure('numeric', 'rad', 'm');
+  data = []; % Its value change when a step is generated
+  
+  % Update handles structure
+  guidata(hObject, handles);
 
-% Update handles structure
-guidata(hObject, handles);
+  % Update window title
+  set(handles.text_title, 'String', strcat('DESIGN STEP - ', ' ', handles.Input_data.Leg, ' Support'));
+  
+  % Assign support_foot variable
+  switch handles.Input_data.Leg
+    case 'Right Leg' % Support on right foot
+      support_foot = 'RF';
 
-% UIWAIT makes design_step wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+    case 'Left Leg' % Support on left foot
+      support_foot = 'LF';    
+  end
+  handles.support_foot = support_foot;
+  
+  % Update handles structure
+  guidata(hObject, handles);
+
+  % Pre-evaluate delta x and delta y CoM in Double Support
+  pre_evaluate_delta_com_ds(hObject, handles);
+
+  % Pre-evaluate foot deltas in Simple and Double Support
+  pre_evaluate_delta_ss(hObject, handles);
+
+  % Pre-evaluate delta x and delta y Arm in Simple Support
+  pre_evaluate_delta_arm_ss(hObject, handles);
+
+  
+  % Plots panel
+  graphstab = uitabpanel(...
+    'Parent',handles.panel_graphics,...
+    'Style','popup',...
+    'Units','normalized',...
+    'Position',[0,0,1,1],...
+    'FrameBackgroundColor',[0.078,0.169,0.549],...
+    'FrameBorderType','etchedin',...
+    'Title',{'Right Leg','Left Leg','Torso','Right Arm','Left Arm'},...%,'CoM'},...
+    'PanelHeights',[59.5,59.5,50,59.5,59.5],...%,50],...
+    'HorizontalAlignment','left',...
+    'FontWeight','bold',...
+    'TitleBackgroundColor',[0.078,0.169,0.549],...
+    'TitleForegroundColor',[1 1 1],...
+    'PanelBackgroundColor',[0.702,0.78,1],...
+    'PanelBorderType','line');%,'SelectedItem',1);
+
+  hpanel = getappdata(graphstab,'panels');
+
+	handles.sd_graph = axes('Parent',getappdata(graphstab,'status'), ...
+                          'Units','normalized',...
+                          'Position',[0.3,0.1,0.4,0.9],'Box','on'); 
+  
+  % Right leg joints
+  handles.axes1 = axes('Parent',hpanel(1),'Position',[.1 .6 .25 .25]);
+  handles.axes2 = axes('Parent',hpanel(1),'Position',[.4 .6 .25 .25]);
+  handles.axes3 = axes('Parent',hpanel(1),'Position',[.7 .6 .25 .25]);
+  handles.axes4 = axes('Parent',hpanel(1),'Position',[.1 .15 .25 .25]);
+  handles.axes5 = axes('Parent',hpanel(1),'Position',[.4 .15 .25 .25]);
+  handles.axes6 = axes('Parent',hpanel(1),'Position',[.7 .15 .25 .25]);
+   
+  % Left leg joints
+  handles.axes7 = axes('Parent',hpanel(2),'Position',[.1 .6 .25 .25]);
+  handles.axes8 = axes('Parent',hpanel(2),'Position',[.4 .6 .25 .25]);
+  handles.axes9 = axes('Parent',hpanel(2),'Position',[.7 .6 .25 .25]);
+  handles.axes10 = axes('Parent',hpanel(2),'Position',[.1 .15 .25 .25]);
+  handles.axes11 = axes('Parent',hpanel(2),'Position',[.4 .15 .25 .25]);
+  handles.axes12 = axes('Parent',hpanel(2),'Position',[.7 .15 .25 .25]);
+   
+  % Torso joints
+  handles.axes13 = axes('Parent',hpanel(3),'Position',[.1 .6 .25 .25]);
+  handles.axes14 = axes('Parent',hpanel(3),'Position',[.7 .6 .25 .25]);   
+   
+  % Right arm joints
+  handles.axes15 = axes('Parent',hpanel(4),'Position',[.1 .6 .25 .25]);
+  handles.axes16 = axes('Parent',hpanel(4),'Position',[.4 .6 .25 .25]);
+  handles.axes17 = axes('Parent',hpanel(4),'Position',[.7 .6 .25 .25]);
+  handles.axes18 = axes('Parent',hpanel(4),'Position',[.1 .15 .25 .25]);
+  handles.axes19 = axes('Parent',hpanel(4),'Position',[.4 .15 .25 .25]);
+  handles.axes20 = axes('Parent',hpanel(4),'Position',[.7 .15 .25 .25]);
+   
+  % Left arm joints
+  handles.axes21 = axes('Parent',hpanel(5),'Position',[.1 .6 .25 .25]);
+  handles.axes22 = axes('Parent',hpanel(5),'Position',[.4 .6 .25 .25]);
+  handles.axes23 = axes('Parent',hpanel(5),'Position',[.7 .6 .25 .25]);
+  handles.axes24 = axes('Parent',hpanel(5),'Position',[.1 .15 .25 .25]);
+  handles.axes25 = axes('Parent',hpanel(5),'Position',[.4 .15 .25 .25]);
+  handles.axes26 = axes('Parent',hpanel(5),'Position',[.7 .15 .25 .25]);
+
+  % CoM value
+  % handles.axes_zmp = axes('Parent',hpanel(6),'Position',[.2 .2 .6 .6]);
+  % handles.axes_robot_plot = axes('Parent',hpanel(6),'Position',[.2 .2 .6 .6]);
+   
+  % Ejes para mostrar la imagen de TEO
+  axes(handles.sd_graph)
+  % [r,map] = imread('teo_photo2.jpg','jpg');
+  [r,map] = imread('TEO-face-background.png','png');
+  image(r); colormap(map); 
+  text(150,200,'Please, click the humanoid part','HorizontalAlignment','center','Color','w','BackgroundColor',[.0 .0 .0]);
+  text(150,250,'to display/hide the joint plots','HorizontalAlignment','center','Color','w','BackgroundColor',[.0 .0 .0]);
+  axis off
+
+%   axes(handles.axes_zmp)
+%   [r,map] = imread('teo_photo2.jpg','jpg');
+%   image(r); colormap(map); axis off
+
+  % Update handles structure
+  guidata(hObject, handles);
+
+  % UIWAIT makes design_step wait for user response (see UIRESUME)
+  % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -298,49 +234,69 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-function pre_evaluate_delta_com_ds(hObject, handles, support_foot, h, TEO, q)
+function pre_evaluate_delta_com_ds(hObject, handles)
+% PRE_EVALUATE_DELTA_COM_DS Pre-evaluate delta x and delta y CoM in Double
+% Support. The CoM is translated to the center of the support foot in
+% CoM_DS1 phase. The opposite translation is realized in the CoM_DS2 phase.
+
+support_foot = handles.support_foot;
+h = handles.h;
+TEO = handles.humanoid_structure;
+q = handles.Input_data.q0;
+
 switch support_foot
   case 'RF' % Support on right foot
     delta = h.CoM_T_RF(q);
-    delta_P(1,:) = (2*delta(1) + (TEO.legs.right.foot.limits.x(1) + TEO.legs.right.foot.limits.x(2)));
-    delta_P(2,:) = (2*delta(2) + (TEO.legs.right.foot.limits.y(1) + TEO.legs.right.foot.limits.y(2)));
+%     delta_P(1,:) = (2*delta(1) + (TEO.legs.right.foot.limits.x(1) + TEO.legs.right.foot.limits.x(2)));
+%     delta_P(2,:) = (2*delta(2) + (TEO.legs.right.foot.limits.y(1) + TEO.legs.right.foot.limits.y(2)));
+
+%     delta_P(1,:) = delta(1) + TEO.legs.right.foot.limits.x(1) + TEO.legs.right.foot.limits.x(2);
+    delta_P(2,:) = delta(2) + TEO.legs.right.foot.limits.y(1) + TEO.legs.right.foot.limits.y(2);
 
   case 'LF' % Support on left foot
     delta = h.CoM_T_LF(q);
-    delta_P(1,:) = (2*delta(1) + (TEO.legs.left.foot.limits.x(1) + TEO.legs.left.foot.limits.x(2)));
-    delta_P(2,:) = (2*delta(2) + (TEO.legs.left.foot.limits.y(1) + TEO.legs.left.foot.limits.y(2)));
+%     delta_P(1,:) = (2*delta(1) + (TEO.legs.left.foot.limits.x(1) + TEO.legs.left.foot.limits.x(2)));
+%     delta_P(2,:) = (2*delta(2) + (TEO.legs.left.foot.limits.y(1) + TEO.legs.left.foot.limits.y(2)));
+
+%     delta_P(1,:) = delta(1) + TEO.legs.left.foot.limits.x(1) + TEO.legs.left.foot.limits.x(2);
+    delta_P(2,:) = delta(2) + TEO.legs.left.foot.limits.y(1) + TEO.legs.left.foot.limits.y(2);
 
 end
 
-delta_P = delta_P/2;
-set(handles.delta_x_CoM_DS1,'String',num2str(delta_P(1)),'BackgroundColor','red');
+% delta_P = delta_P/2;
+% set(handles.delta_x_CoM_DS1,'String',num2str(delta_P(1)),'BackgroundColor','red');
 set(handles.delta_y_CoM_DS1,'String',num2str(delta_P(2)),'BackgroundColor','red');
-set(handles.delta_x_CoM_DS2,'String',num2str(-delta_P(1)),'BackgroundColor','red');
+% set(handles.delta_x_CoM_DS2,'String',num2str(-delta_P(1)),'BackgroundColor','red');
 set(handles.delta_y_CoM_DS2,'String',num2str(-delta_P(2)),'BackgroundColor','red');
 
 guidata(hObject, handles)
 
 
-function pre_evaluate_delta_foot(hObject, handles)
+function pre_evaluate_delta_ss(hObject, handles)
+% PRE_EVALUATE_DELTA_SS Pre-evaluate delta x, delta y, and delta z of CoM
+% in Single Support.
 
-L = handles.Input_data.L_val;
-H = handles.Input_data.H_val;
-alpha_sf = handles.Input_data.alpha_sf;
+L = handles.Input_data.L_val; % Floating foot X variation
+H = handles.Input_data.H_val; % Floating foot Z variation
+gamma_com = handles.Input_data.gamma_com; % Percentage of X variation fue to CoM variation
 
-X1_SF = L*alpha_sf/2;
+X1_SF = L*gamma_com/2;
 set(handles.delta_x_CoM_SS1,'String',num2str(X1_SF),'BackgroundColor','red');
-X2_SF = L*alpha_sf;
+X2_SF = L*gamma_com;
 set(handles.delta_x_CoM_SS2,'String',num2str(X2_SF),'BackgroundColor','red');
 
-X1_FF = L*(1-alpha_sf)/2;
+X1_FF = L*(1-gamma_com)/2;
 set(handles.delta_x_FF_SS1,'String',num2str(X1_FF),'BackgroundColor','red');
 set(handles.delta_z_FF_SS1,'String',num2str(H),'BackgroundColor','red');
 
-X2_FF = L*(1-alpha_sf);
+X2_FF = L*(1-gamma_com);
 set(handles.delta_x_FF_SS2,'String',num2str(X2_FF),'BackgroundColor','red');
 guidata(hObject, handles)
 
-function pre_evaluate_delta_arm_ss(hObject, handles, support_foot)
+
+function pre_evaluate_delta_arm_ss(hObject, handles)
+
+support_foot = handles.support_foot;
 
 % Get floating foot deltas
 floating_delta_x = str2double(get(handles.delta_x_FF_SS2,'String'));
@@ -358,12 +314,10 @@ guidata(hObject, handles)
 
 function pushbutton_generate_step_Callback(hObject, eventdata, handles)
 global q dq ddq trajectory d_trajectory dd_trajectory
-
 global data
 
-
 % Wait bar
-waitbar1= waitbar(0,'Please wait...');
+waitbar1 = waitbar(0,'Please wait...');
 
 % Steps Data
 if isempty(data)
@@ -378,8 +332,7 @@ data.q0 = handles.Input_data.q0;
 data.T = handles.Input_data.T_val;              % Total time. Time of the step
 
 data.alpha_ds = handles.Input_data.alpha_ds;    % Percentage of the total time for double support
-data.alpha_sf = handles.Input_data.alpha_sf;    % Percentage of the total time for support foot ???
-data.DS_or_SS = handles.Input_data.DS_or_SS;    %
+data.gamma_com = handles.Input_data.gamma_com;    % Percentage of the total time for support foot ???
 data.L = handles.Input_data.L_val;              % Length of the step (X direction)
 data.H = handles.Input_data.H_val;              % Height of the step (Z direction)
                 % Initial pose
@@ -467,7 +420,7 @@ end
 waitbar(0.7)
 
 % borrar el grafico actual de axes_zmp (imagen de TEO):
-cla(handles.axes_zmp)
+% cla(handles.axes_zmp)
 
 handles.result.q = q;
 handles.result.dq = dq;
@@ -482,19 +435,20 @@ waitbar(0.8)
 set(handles.plot_options, 'Visible', 'On')
 plot_all_graphs(hObject,handles,'PLOT SPACE') % Show joints space by default
 
-waitbar(0.9)
+  waitbar(0.9)
 
-% Update number of steps
-data.nsteps = data.nsteps + 1;
+  % Update number of steps
+  data.nsteps = data.nsteps + 1;
 
-% Disable button
-disable_generate_step_button(hObject, eventdata, handles)
+  % Disable generate_step button
+  disable_generate_step_button(hObject, eventdata, handles)
 
-waitbar(1)
-%Close wait bar when ds_ss_step_TEO has finished
-close(waitbar1)
+  waitbar(1)
+  % Close wait bar when the generation has finished
+  close(waitbar1)
 
-guidata(hObject,handles)
+  % Update handles structure
+  guidata(hObject, handles);
 
 
 function disable_generate_step_button(hObject, eventdata, handles)
@@ -712,29 +666,29 @@ end
 
 
 function plot_options_SelectionChangeFcn(hObject, eventdata, handles)
-handles.plot_new = get(eventdata.NewValue,'String');
-old_val = get(eventdata.OldValue,'String');
+  handles.plot_new = get(eventdata.NewValue,'String');
+  old_val = get(eventdata.OldValue,'String');
 
-for jj=1:6
-  cla(handles.(strcat('axes',num2str(jj))))
-  cla(handles.(strcat('axes',num2str(jj+6))))
-  
-end
-for jj=1:5
-  cla(handles.(strcat('axes',num2str(jj+13))))
-  cla(handles.(strcat('axes',num2str(jj+18)))) 
-end
+  for jj = 1:6
+    cla(handles.(strcat('axes',num2str(jj))))
+    cla(handles.(strcat('axes',num2str(jj+6))))
 
-plot_all_graphs(hObject,handles,handles.plot_new)
+  end
+  for jj = 1:5
+    cla(handles.(strcat('axes',num2str(jj+13))))
+    cla(handles.(strcat('axes',num2str(jj+18)))) 
+  end
 
-guidata(hObject,handles)
+  plot_all_graphs(hObject,handles,handles.plot_new)
+
+  guidata(hObject,handles)
 
 
 function pushbutton3_Callback(hObject, eventdata, handles)
 
 function pushbutton_matlab_vis_Callback(hObject, eventdata, handles)
-global trajectory q TEO h
-matlab_visualization (trajectory, q, TEO, h)
+global trajectory q
+matlab_visualization (trajectory, q, handles.humanoid_structure, handles.h)
 
 
 % --------------------------------------------------------------------
@@ -746,9 +700,9 @@ close(handles.figure1)
 
 % --------------------------------------------------------------------
 function menu_main_TEO_Callback(hObject, eventdata, handles)
-TEOTraGen
-guidata(hObject,handles)
-close(handles.figure1)
+  TEOTraGen
+  guidata(hObject,handles)
+  close(handles.figure1)
 
 
 % --------------------------------------------------------------------
@@ -974,7 +928,7 @@ end
 guidata(hObject,handles)
 
 function pushbutton_new_step_Callback(hObject, eventdata, handles)
-global TEO h data
+global data
 if isstruct(handles.result)
   q = handles.result.q(:,end);
   % Change support_foot
@@ -986,12 +940,17 @@ if isstruct(handles.result)
     Leg = 'Right Leg';
   end
 
-  pre_evaluate_delta_com_ds(hObject, handles, support_foot, h, TEO, q);
+  handles.support_foot = support_foot;
   
-  pre_evaluate_delta_arm_ss(hObject, handles, support_foot);
+  % Update handles structure
+  guidata(hObject, handles);
+  
+  pre_evaluate_delta_com_ds(hObject, handles);
+  
+  pre_evaluate_delta_arm_ss(hObject, handles);
   
   if ~isempty(data)
-    data.t0 = data.Tend;                                    % Initial time
+    data.t0 = data.Tend; % Initial time
     data.Tend = data.t0 + data.T;
     data.q = q;
   end
@@ -1045,7 +1004,6 @@ function menu_others_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function whole_body_plot_Callback(hObject, eventdata, handles)
-global TEO
 
 global trajectory d_trajectory dd_trajectory
 global q dq ddq
@@ -1058,14 +1016,13 @@ trajectories.joints.q = q;
 trajectories.joints.dq = dq;
 trajectories.joints.ddq = ddq;
 
-trajectory_plots(trajectories.operational, trajectories.joints, TEO);
+trajectory_plots(trajectories.operational, trajectories.joints, handles.humanoid_structure);
 
 
 function Untitled_9_Callback(hObject, eventdata, handles)
 
 
 function relative_position_Callback(hObject, eventdata, handles)
-global TEO h 
 global trajectory d_trajectory dd_trajectory
 global q dq ddq
 global data
@@ -1074,7 +1031,7 @@ prevq = q;
 prevdq = dq;
 prevddq = ddq;
 
-[newq, newdq, newddq, support_foot] = joints_space_interpolation(TEO, h, q(:,1), zeros(26,1), data.Ts);
+[newq, newdq, newddq, support_foot] = joints_space_interpolation(handles.humanoid_structure, handles.h, q(:,1), zeros(26,1), data.Ts);
 
 if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
   q = [newq prevq];
