@@ -93,9 +93,9 @@ for jj = 1:L-1
       end
       
       % Errors signals
-      [e_p_LF(:,jj) e_o_LF(:,jj)] = determine_error (trajectory.CoM(:,jj) + LF_p0_w, ...
+      [e_p_LF(:,jj), e_o_LF(:,jj)] = determine_error (trajectory.CoM(:,jj) + LF_p0_w, ...
                                                      pose_quat2rpy(real(h.LF_T_w(q(:,jj)))));
-      [e_p_RF(:,jj) e_o_RF(:,jj)] = determine_error (trajectory.CoM(:,jj) + RF_p0_w, ...
+      [e_p_RF(:,jj), e_o_RF(:,jj)] = determine_error (trajectory.CoM(:,jj) + RF_p0_w, ...
                                                      pose_quat2rpy(real(h.RF_T_w(q(:,jj)))));
 
       % Control signals
@@ -111,10 +111,10 @@ for jj = 1:L-1
         w_p0_RF = pose_quat2rpy(h.w_T_RF(q(:,jj)));
       end
       % Errors signals for support foot
-      [e_p_LF(:,jj) e_o_LF(:,jj)] = determine_error (trajectory.CoM(:,jj) + LF_p0_w, ...
+      [e_p_LF(:,jj), e_o_LF(:,jj)] = determine_error (trajectory.CoM(:,jj) + LF_p0_w, ...
                                                      pose_quat2rpy(real(h.LF_T_w(q(:,jj)))));
 
-      [e_p_RF(:,jj) e_o_RF(:,jj)] = determine_error (trajectory.RF(:,jj) + w_p0_RF, ...
+      [e_p_RF(:,jj), e_o_RF(:,jj)] = determine_error (trajectory.RF(:,jj) + w_p0_RF, ...
                                                      pose_quat2rpy(real(h.w_T_RF(q(:,jj)))));
 
       % Control signals for support foot
@@ -131,10 +131,10 @@ for jj = 1:L-1
         w_p0_LF = pose_quat2rpy(h.w_T_LF(q(:,jj)));
       end
       % Errors signals for support foot
-      [e_p_RF(:,jj) e_o_RF(:,jj)] = determine_error (trajectory.CoM(:,jj) + RF_p0_w, ...
+      [e_p_RF(:,jj), e_o_RF(:,jj)] = determine_error (trajectory.CoM(:,jj) + RF_p0_w, ...
                                                      pose_quat2rpy(real(h.RF_T_w(q(:,jj)))));
 
-      [e_p_LF(:,jj) e_o_LF(:,jj)] = determine_error (trajectory.LF(:,jj) + w_p0_LF, ...
+      [e_p_LF(:,jj), e_o_LF(:,jj)] = determine_error (trajectory.LF(:,jj) + w_p0_LF, ...
                                                      pose_quat2rpy(real(h.w_T_LF(q(:,jj)))));
 
       % Control signals for support foot
@@ -153,8 +153,8 @@ for jj = 1:L-1
   
   % Inverse differential kinematics for Arms
   % Errors signals for support foot
-  [e_p_RH(:,jj) e_o_RH(:,jj)] = determine_error (trajectory.RH(:,jj) + CoM_p0_RH, pose_quat2rpy(h.CoM_T_RH(q(:,jj))));
-  [e_p_LH(:,jj) e_o_LH(:,jj)] = determine_error (trajectory.LH(:,jj) + CoM_p0_LH, pose_quat2rpy(h.CoM_T_LH(q(:,jj))));
+  [e_p_RH(:,jj), e_o_RH(:,jj)] = determine_error (trajectory.RH(:,jj) + CoM_p0_RH, pose_quat2rpy(h.CoM_T_RH(q(:,jj))));
+  [e_p_LH(:,jj), e_o_LH(:,jj)] = determine_error (trajectory.LH(:,jj) + CoM_p0_LH, pose_quat2rpy(h.CoM_T_LH(q(:,jj))));
   
   % Control signals for support foot
   u_RH = [d_trajectory.RH(1:3,jj) + Kp*e_p_RH(:,jj); d_trajectory.RH(4:6,jj) + Ko*e_o_RH(:,jj)];

@@ -32,7 +32,7 @@ humanoid_fields = humanoid_operational_fields ();
 p0_arm = trajectory.(arm)(:,end);
 p1_arm = p0_arm;
 p2_arm = p0_arm + delta_arm;
-p3_arm = p2_arm;
+p3_arm = p1_arm;
 
 % Convert to trajectory poses
 P0 = set_trajectory_condition(T(1), p0_arm, ZERO_CON, ZERO_CON);

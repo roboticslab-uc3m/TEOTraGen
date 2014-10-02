@@ -316,6 +316,8 @@ function pushbutton_generate_step_Callback(hObject, eventdata, handles)
 global q dq ddq trajectory d_trajectory dd_trajectory
 global data
 
+h = handles.h;
+
 % Wait bar
 waitbar1 = waitbar(0,'Please wait...');
 
@@ -414,7 +416,7 @@ if data.nsteps == 0
 end
 
 % Double Step and Simple Step for TEO Robot
-[q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(delta, data, support_foot, trajectory, d_trajectory, dd_trajectory);
+[q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(h,delta, data, support_foot, trajectory, d_trajectory, dd_trajectory);
 
 
 waitbar(0.7)

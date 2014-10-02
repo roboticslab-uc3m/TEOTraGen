@@ -1,4 +1,4 @@
-function [q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(delta, data, support_foot, trajectory, d_trajectory, dd_trajectory)
+function [q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(h, delta, data, support_foot, trajectory, d_trajectory, dd_trajectory)
                       
 %DS_SS_STEP_TEO Double Support Step for the robot TEO
 %   [Q, DQ, DDQ, TRAJECTORY, D_TRAJECTORY, DD_TRAJECTORY] =
@@ -24,7 +24,6 @@ function [q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(
                     %%% DS_SS_STEP_TEO FUNCTION %%%
                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-global h TEO pvia 
 
 % INPUTS
     % Steps Data
