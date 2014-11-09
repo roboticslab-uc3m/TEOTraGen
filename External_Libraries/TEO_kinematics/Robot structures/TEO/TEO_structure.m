@@ -412,123 +412,123 @@ else
     %%%DOMINGOOO: Solo se han modificado los angle_limits
     
     % Right Leg
-    legs.right.joint(1).angle_limits  = [-30, 24] * DEGREE2RAD;
+    legs.right.joint(1).angle_limits  = [-90, 90] * DEGREE2RAD;
     legs.right.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     legs.right.joint(1).relation      = 209 / DEGREE2RAD;
 
-    legs.right.joint(2).angle_limits  = [-40, 30] * DEGREE2RAD;
+    legs.right.joint(2).angle_limits  = [-20, 20] * DEGREE2RAD;
     legs.right.joint(2).torque_limits = [2, 4.5] * M2MM^2;
     legs.right.joint(2).relation      = 209 / DEGREE2RAD;
 
-    legs.right.joint(3).angle_limits  = [-120, 45] * DEGREE2RAD;
+    legs.right.joint(3).angle_limits  = [-30, 45] * DEGREE2RAD;
     legs.right.joint(3).torque_limits = [1.5, 3] * M2MM^2;
     legs.right.joint(3).relation      = -209 / DEGREE2RAD;
 
-    legs.right.joint(4).angle_limits  = [0, 90] * DEGREE2RAD;
+    legs.right.joint(4).angle_limits  = [-5, 80] * DEGREE2RAD;
     legs.right.joint(4).torque_limits = [2, 4.5] * M2MM^2;
     legs.right.joint(4).relation      = 209 / DEGREE2RAD;
 
-    legs.right.joint(5).angle_limits  = [-85, 85] * DEGREE2RAD;
+    legs.right.joint(5).angle_limits  = [-18, 20] * DEGREE2RAD;
     legs.right.joint(5).torque_limits = [2, 4.5] * M2MM^2;
     legs.right.joint(5).relation      = 209 / DEGREE2RAD;
 
-    legs.right.joint(6).angle_limits  = [-20, 20] * DEGREE2RAD;
+    legs.right.joint(6).angle_limits  = [-25, 25] * DEGREE2RAD;
     legs.right.joint(6).torque_limits = [1.5, 3] * M2MM^2;
     legs.right.joint(6).relation      = -209 / DEGREE2RAD;
 
     % Left Leg
-    legs.left.joint(1).angle_limits  = [-30, 24] * DEGREE2RAD;
+    legs.left.joint(1).angle_limits  = [-90, 90] * DEGREE2RAD;
     legs.left.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     legs.left.joint(1).relation      = 209 / DEGREE2RAD;
 
-    legs.left.joint(2).angle_limits  = [-40, 30] * DEGREE2RAD;
+    legs.left.joint(2).angle_limits  = [-20, 20] * DEGREE2RAD;
     legs.left.joint(2).torque_limits = [2, 4.5] * M2MM^2;
     legs.left.joint(2).relation      = 209 / DEGREE2RAD;
 
-    legs.left.joint(3).angle_limits  = [-120, 45] * DEGREE2RAD;
+    legs.left.joint(3).angle_limits  = [-30, 45] * DEGREE2RAD;
     legs.left.joint(3).torque_limits = [1.5, 3] * M2MM^2;
     legs.left.joint(3).relation      = 209 / DEGREE2RAD;
 
-    legs.left.joint(4).angle_limits  = [0, 90] * DEGREE2RAD;
+    legs.left.joint(4).angle_limits  = [-5, 80] * DEGREE2RAD;
     legs.left.joint(4).torque_limits = [2, 4.5] * M2MM^2;
     legs.left.joint(4).relation      = -209 / DEGREE2RAD;
 
-    legs.left.joint(5).angle_limits  = [-85, 85] * DEGREE2RAD;
+    legs.left.joint(5).angle_limits  = [-18, 20] * DEGREE2RAD;
     legs.left.joint(5).torque_limits = [2, 4.5] * M2MM^2;
     legs.left.joint(5).relation      = -209 / DEGREE2RAD;
 
-    legs.left.joint(6).angle_limits  = [-20, 20] * DEGREE2RAD;
+    legs.left.joint(6).angle_limits  = [-25, 25] * DEGREE2RAD;
     legs.left.joint(6).torque_limits = [1.5, 3] * M2MM^2;
     legs.left.joint(6).relation      = -209 / DEGREE2RAD;
 
     % Right Arm
-    arms.right.joint(1).angle_limits  = [-180, 180] * DEGREE2RAD;
+    arms.right.joint(1).angle_limits  = [-45, 70] * DEGREE2RAD;
     arms.right.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(1).relation      = 209 / DEGREE2RAD;
     % In the robot the 0 in the shoulder is -90� w.r.t. to standard convention
     arms.right.joint(1).offset        = -pi/2;
 
-    arms.right.joint(2).angle_limits  = [-45, 120] * DEGREE2RAD;
+    arms.right.joint(2).angle_limits  = [-15, 70] * DEGREE2RAD;
     arms.right.joint(2).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(2).relation      = 209 / DEGREE2RAD;
 
-    arms.right.joint(3).angle_limits  = [-60, 60] * DEGREE2RAD;
+    arms.right.joint(3).angle_limits  = [-10, 75] * DEGREE2RAD;
     arms.right.joint(3).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(3).relation      = 209 / DEGREE2RAD;
 
-    arms.right.joint(4).angle_limits  = [-100, 100] * DEGREE2RAD;
+    arms.right.joint(4).angle_limits  = [-10, 100] * DEGREE2RAD;
     arms.right.joint(4).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(4).relation      = -209 / DEGREE2RAD;
 
-    arms.right.joint(5).angle_limits  = [-40, 55] * DEGREE2RAD;
+    arms.right.joint(5).angle_limits  = [-90, 90] * DEGREE2RAD;
     arms.right.joint(5).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.right.joint(5).relation      = 0;
     
-    arms.right.joint(6).angle_limits  = [-105, 105] * DEGREE2RAD;
+    arms.right.joint(6).angle_limits  = [-10, 100] * DEGREE2RAD;
     arms.right.joint(6).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.right.joint(6).relation      = 0;
 
     % Left Arm
-    arms.left.joint(1).angle_limits  = [-180, 180] * DEGREE2RAD;
+    arms.left.joint(1).angle_limits  = [-45, 70] * DEGREE2RAD;
     arms.left.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(1).relation      = 209 / DEGREE2RAD;
     % In the robot the 0 in the shoulder is -90� w.r.t. to standard convention
     arms.left.joint(1).offset        = -pi/2;
 
-    arms.left.joint(2).angle_limits  = [-45, 120] * DEGREE2RAD;
+    arms.left.joint(2).angle_limits  = [-15, 70] * DEGREE2RAD;
     arms.left.joint(2).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(2).relation      = 209 / DEGREE2RAD;
 
-    arms.left.joint(3).angle_limits  = [-60, 60] * DEGREE2RAD;
+    arms.left.joint(3).angle_limits  = [-10, 75] * DEGREE2RAD;
     arms.left.joint(3).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(3).relation      = 209 / DEGREE2RAD;
 
-    arms.left.joint(4).angle_limits  = [-100, 100] * DEGREE2RAD;
+    arms.left.joint(4).angle_limits  = [-10, 100] * DEGREE2RAD;
     arms.left.joint(4).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(4).relation      = -209 / DEGREE2RAD;
 
-    arms.left.joint(5).angle_limits  = [-40, 55] * DEGREE2RAD;
+    arms.left.joint(5).angle_limits  = [-90, 90] * DEGREE2RAD;
     arms.left.joint(5).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.left.joint(5).relation      = 0;
     
-    arms.left.joint(6).angle_limits  = [-105, 105] * DEGREE2RAD;
+    arms.left.joint(6).angle_limits  = [-10, 100] * DEGREE2RAD;
     arms.left.joint(6).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.left.joint(6).relation      = 0;
 
     % Waist
-    waist.joint(1).angle_limits      = [-1, 90] * DEGREE2RAD;
+    waist.joint(1).angle_limits      = [-45, 45] * DEGREE2RAD;
     waist.joint(1).torque_limits     = [2, 4.5] * M2MM^2;
     waist.joint(1).relation          = 209 / DEGREE2RAD;    
     
-    waist.joint(2).angle_limits      = [-1, 90] * DEGREE2RAD;
+    waist.joint(2).angle_limits      = [-10, 10] * DEGREE2RAD;
     waist.joint(2).torque_limits     = [2, 4.5] * M2MM^2;
     waist.joint(2).relation          = 209 / DEGREE2RAD;   
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Mass/Inertia Properties of Hoap-3 %
-    % Default angle: Radians            %
-    % Default length: mm                %   
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Mass/Inertia Properties of TEO %
+    % Default angle: Radians         %
+    % Default length: mm             %   
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % The link jj is the link corresponding to the jj joint
     % The positions and Inertias are referred to the corresponding joint
     % w.r.t. its coordinate frame
@@ -616,7 +616,7 @@ else
     % Hoap-3 Manual joint 3 origin is in the elbow, here it is translated
     % in the shoulder
     %arms.right.link(3).CoM = R3 * [-2.72189; -1.60245; -2.20452] + [0; 0; -arms.link_lengths(2)];
-	R3 = eye(3);
+	  R3 = eye(3);
     arms.right.link(3).CoM = R3 * [-2.72189; -1.60245; -2.20452];
     arms.right.link(3).inertia =  rotate_inertia_matrix([6.49972e+01,-1.21159e-01, 1.21288; -1.21159e-01, 5.29142e+01, 6.02001e-01; 1.21288, 6.02001e-01, 6.80659e+01], R3);
 
