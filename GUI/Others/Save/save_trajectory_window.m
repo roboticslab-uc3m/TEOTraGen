@@ -142,22 +142,138 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
       elseif option == 3 % Custom format
           [m,n] = size(q);
           [file1,path] = uiputfile([handles.traj_name_string '_q.csv'], 'Save Joint Angles as');
+          
+          % TODO: TEMPORAL CHANGES 10/11/14
+          % Convert to degrees
+          q = radtodeg(q);
+          % Change the signs of joints with different orientation
+          q(:,1) = -q(:,1);
+          q(:,7) = -q(:,7);
+          q(:,8) = -q(:,8);
+          q(:,15) = -q(:,15);
+          q(:,17) = -q(:,17);
+          q(:,18) = -q(:,18);
+          q(:,19) = -q(:,19);
+          q(:,20) = -q(:,20);
+          q(:,23) = -q(:,23);
+          q(:,25) = -q(:,25);
+          
           csvid = fopen(file1, 'w');
           fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
                                                                                                                                      [q(6,:); q(5,:); q(4,:); q(3,:); q(2,:); q(1,:); q(7:end,:)]);
           fclose(csvid);
 
           [file2,path] = uiputfile([handles.traj_name_string '_dq.csv'], 'Save Joint Velocities as');
+          
+          % TODO: TEMPORAL CHANGES 10/11/14
+          % Convert to degrees
+          dq = radtodeg(dq);
+          % Change the signs of joints with different orientation
+          dq(:,1) = -dq(:,1);
+          dq(:,7) = -dq(:,7);
+          dq(:,8) = -dq(:,8);
+          dq(:,15) = -dq(:,15);
+          dq(:,17) = -dq(:,17);
+          dq(:,18) = -dq(:,18);
+          dq(:,19) = -dq(:,19);
+          dq(:,20) = -dq(:,20);
+          dq(:,23) = -dq(:,23);
+          dq(:,25) = -dq(:,25);
+          
           csvid = fopen(file2, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
                                                                                                                                      [dq(6,:); dq(5,:); dq(4,:); dq(3,:); dq(2,:); dq(1,:); dq(7:end,:)]);
           fclose(csvid);
 
           [file3,path] = uiputfile([handles.traj_name_string '_ddq.csv'], 'Save Joint Accelerations as');
+          
+          % TODO: TEMPORAL CHANGES 10/11/14
+          % Convert to degrees
+          ddq = radtodeg(dq);
+          % Change the signs of joints with different orientation
+          ddq(:,1) = -ddq(:,1);
+          ddq(:,7) = -ddq(:,7);
+          ddq(:,8) = -ddq(:,8);
+          ddq(:,15) = -ddq(:,15);
+          ddq(:,17) = -ddq(:,17);
+          ddq(:,18) = -ddq(:,18);
+          ddq(:,19) = -ddq(:,19);
+          ddq(:,20) = -ddq(:,20);
+          ddq(:,23) = -ddq(:,23);
+          ddq(:,25) = -ddq(:,25);
+          
           csvid = fopen(file3, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
                                                                                                                                      [ddq(6,:); ddq(5,:); ddq(4,:); ddq(3,:); ddq(2,:); ddq(1,:); ddq(7:end,:)]);
           fclose(csvid);      
+          
+      elseif option == 4 % Custom format
+          [m,n] = size(q);
+          [file1,path] = uiputfile([handles.traj_name_string '_q.csv'], 'Save Joint Angles as');
+          
+          % TODO: TEMPORAL CHANGES 10/11/14
+          % Convert to degrees
+          q = radtodeg(q);
+          % Change the signs of joints with different orientation
+          q(:,1) = -q(:,1);
+          q(:,7) = -q(:,7);
+          q(:,8) = -q(:,8);
+          q(:,15) = -q(:,15);
+          q(:,17) = -q(:,17);
+          q(:,18) = -q(:,18);
+          q(:,19) = -q(:,19);
+          q(:,20) = -q(:,20);
+          q(:,23) = -q(:,23);
+          q(:,25) = -q(:,25);
+          
+          csvid = fopen(file1, 'w');
+          fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+                                                                                             [q(7,:); q(8,:); q(9,:); q(10,:); q(11,:); q(12,:); q(14,:); q(1,:); q(2,:); q(3,:); q(4,:); q(5,:); q(6,:)]);
+          fclose(csvid);
+
+          [file2,path] = uiputfile([handles.traj_name_string '_dq.csv'], 'Save Joint Velocities as');
+          
+          % TODO: TEMPORAL CHANGES 10/11/14
+          % Convert to degrees
+          dq = radtodeg(dq);
+          % Change the signs of joints with different orientation
+          dq(:,1) = -dq(:,1);
+          dq(:,7) = -dq(:,7);
+          dq(:,8) = -dq(:,8);
+          dq(:,15) = -dq(:,15);
+          dq(:,17) = -dq(:,17);
+          dq(:,18) = -dq(:,18);
+          dq(:,19) = -dq(:,19);
+          dq(:,20) = -dq(:,20);
+          dq(:,23) = -dq(:,23);
+          dq(:,25) = -dq(:,25);
+          
+          csvid = fopen(file2, 'w');
+          fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+                                                                                             [dq(7,:); dq(8,:); dq(9,:); dq(10,:); dq(11,:); dq(12,:); dq(14,:); dq(1,:); dq(2,:); dq(3,:); dq(4,:); dq(5,:); dq(6,:)]);
+          fclose(csvid);
+
+          [file3,path] = uiputfile([handles.traj_name_string '_ddq.csv'], 'Save Joint Accelerations as');
+          
+          % TODO: TEMPORAL CHANGES 10/11/14
+          % Convert to degrees
+          ddq = radtodeg(dq);
+          % Change the signs of joints with different orientation
+          ddq(:,1) = -ddq(:,1);
+          ddq(:,7) = -ddq(:,7);
+          ddq(:,8) = -ddq(:,8);
+          ddq(:,15) = -ddq(:,15);
+          ddq(:,17) = -ddq(:,17);
+          ddq(:,18) = -ddq(:,18);
+          ddq(:,19) = -ddq(:,19);
+          ddq(:,20) = -ddq(:,20);
+          ddq(:,23) = -ddq(:,23);
+          ddq(:,25) = -ddq(:,25);
+          
+          csvid = fopen(file3, 'w');
+          fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+                                                                                             [ddq(7,:); ddq(8,:); ddq(9,:); ddq(10,:); ddq(11,:); ddq(12,:); ddq(14,:); ddq(6,:); ddq(5,:); ddq(4,:); ddq(3,:); ddq(2,:); ddq(1,:)]);
+          fclose(csvid);   
       end
   catch
       disp('Save trajectories/joints canceled');

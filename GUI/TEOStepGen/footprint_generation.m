@@ -25,7 +25,7 @@ function varargout = footprint_generation(varargin)
 
 % Edit the above text to modify the response to help footprint_generation
 
-% Last Modified by GUIDE v2.5 08-Jun-2014 21:15:40
+% Last Modified by GUIDE v2.5 10-Nov-2014 15:34:39
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -918,7 +918,6 @@ for ii = 1:2:nfootprints
   [trajectories.joints.q(:,ntrajdata:ntrajdata_end), trajectories.joints.dq(:,ntrajdata:ntrajdata_end), trajectories.joints.ddq(:,ntrajdata:ntrajdata_end)] = inverse_ds_ss_jacobian_quat(trajectories.joints.q(:,ntrajdata), step_trajectory, step_dtrajectory, data.trajectory_settings.h);
   %[trajectories.joints.q(:,ntrajdata:ntrajdata_end), trajectories.joints.dq(:,ntrajdata:ntrajdata_end), trajectories.joints.ddq(:,ntrajdata:ntrajdata_end)] = inverse_ds_ss_jacobian_quat_second_order(trajectories.joints.q(:,ntrajdata), step_trajectory, step_dtrajectory, step_ddtrajectory, data.trajectory_settings.h);
   
-
   plot_footprint_local(footprints_poses.local(:,ii+1), floating_foot);
   
   t0 = step_times.Tend;
@@ -930,8 +929,13 @@ for ii = 1:2:nfootprints
     floating_foot ='Right';
     ff_field = 'RF';
   end
-    
+  
 end
+
+  handles.result.q = trajectories.joints.q;
+  handles.result.dq = trajectories.joints.dq;
+  handles.result.ddq = trajectories.joints.ddq;
+  guidata(hObject,handles)
 
 % set(handles.pushbutton_whole_trajectory,'Enable','on')
 
@@ -1771,3 +1775,316 @@ hold on
   plot3(zmp_trajectory.data(1,:), zmp_trajectory.data(2,:), zmp_trajectory.data(3,:), 'color', 'm');
   drawnow
 hold off
+
+
+% --------------------------------------------------------------------
+function Untitled_1_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function Untitled_2_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function joint_angles_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to joint_angles_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function ang_vel_acc_csv_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to ang_vel_acc_csv_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function ang_vel_acc_save_txt_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  dQ = handles.result.dq;
+  ddQ = handles.result.ddq;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  %dQtext = [dQ(1:6,:);dQ(14:17,:);dQ(7:12,:);dQ(19:22,:);dQ(13,:);zeros(1,n);dQ(18,:)];
+  %ddQtext = [ddQ(1:6,:);ddQ(14:17,:);ddQ(7:12,:);ddQ(19:22,:);ddQ(13,:);zeros(1,n);ddQ(18,:)];
+  try
+    [file1,path] = uiputfile('*.txt','Save Joint Angles as');
+    dlmwrite(file1,Q,'delimiter','\t','precision','%.6f')
+  catch
+     disp('Save joint angles *.txt aborted');
+  end
+  try
+    [file2,path] = uiputfile('*.txt','Save Joint Velocities as');
+    dlmwrite(file2,dQ,'delimiter','\t','precision','%.6f')
+  catch
+    disp('Save joint velocities *.txt aborted');
+  end
+  try
+    [file3,path] = uiputfile('*.txt','Save Joint Accelerations as');
+    dlmwrite(file3,ddQ,'delimiter','\t','precision','%.6f')
+  catch
+    disp('Save joint acceleration *.txt aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+guidata(hObject,handles)
+
+
+% --------------------------------------------------------------------
+function ang_vel_acc_save_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  dQ = handles.result.dq;
+  ddQ = handles.result.ddq;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  %dQtext = [dQ(1:6,:);dQ(14:17,:);dQ(7:12,:);dQ(19:22,:);dQ(13,:);zeros(1,n);dQ(18,:)];
+  %ddQtext = [ddQ(1:6,:);ddQ(14:17,:);ddQ(7:12,:);ddQ(19:22,:);ddQ(13,:);zeros(1,n);ddQ(18,:)];
+  try
+  [file1,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file1, 'w');
+  fprintf(csvid, '%1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f \n', Q');
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+
+  try
+    [file2,path] = uiputfile('*.csv','Save Joint Velocities as');
+    csvid = fopen(file2, 'w');
+    fprintf(csvid, '%1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f \n', dQ');
+    fclose(csvid);
+  catch
+    disp('Save joint velocities *.csv aborted');
+  end
+
+  try
+    [file3,path] = uiputfile('*.csv','Save Joint Accelerations as');
+    csvid = fopen(file3, 'w');
+    fprintf(csvid, '%1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f \n', ddQ');
+    fclose(csvid);
+  catch
+    disp('Save joint accelerations *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+
+
+% --------------------------------------------------------------------
+function ang_vel_acc_save_teo_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  dQ = handles.result.dq;
+  ddQ = handles.result.ddq;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  %dQtext = [dQ(1:6,:);dQ(14:17,:);dQ(7:12,:);dQ(19:22,:);dQ(13,:);zeros(1,n);dQ(18,:)];
+  %ddQtext = [ddQ(1:6,:);ddQ(14:17,:);ddQ(7:12,:);ddQ(19:22,:);ddQ(13,:);zeros(1,n);ddQ(18,:)];
+  
+    % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  Q = radtodeg(Q);
+  % Change the signs of joints with different orientation
+  Q(:,1) = -Q(:,1);
+  Q(:,7) = -Q(:,7);
+  Q(:,8) = -Q(:,8);
+  Q(:,15) = -Q(:,15);
+  Q(:,17) = -Q(:,17);
+  Q(:,18) = -Q(:,18);
+  Q(:,19) = -Q(:,19);
+  Q(:,20) = -Q(:,20);
+  Q(:,23) = -Q(:,23);
+  Q(:,25) = -Q(:,25);
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  dQ = radtodeg(dQ);
+  % Change the signs of joints with different orientation
+  dQ(:,1) = -dQ(:,1);
+  dQ(:,7) = -dQ(:,7);
+  dQ(:,8) = -dQ(:,8);
+  dQ(:,15) = -dQ(:,15);
+  dQ(:,17) = -dQ(:,17);
+  dQ(:,18) = -dQ(:,18);
+  dQ(:,19) = -dQ(:,19);
+  dQ(:,20) = -dQ(:,20);
+  dQ(:,23) = -dQ(:,23);
+  dQ(:,25) = -dQ(:,25);
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  ddQ = radtodeg(ddQ);
+  % Change the signs of joints with different orientation
+  ddQ(:,1) = -ddQ(:,1);
+  ddQ(:,7) = -ddQ(:,7);
+  ddQ(:,8) = -ddQ(:,8);
+  ddQ(:,15) = -ddQ(:,15);
+  ddQ(:,17) = -ddQ(:,17);
+  ddQ(:,18) = -ddQ(:,18);
+  ddQ(:,19) = -ddQ(:,19);
+  ddQ(:,20) = -ddQ(:,20);
+  ddQ(:,23) = -ddQ(:,23);
+  ddQ(:,25) = -ddQ(:,25);
+  
+  
+  try
+  [file1,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file1, 'w');
+    fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                   [Q(6,:); Q(5,:); Q(4,:); Q(3,:); Q(2,:); Q(1,:); Q(7:end,:)]);
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+
+  try
+    [file2,path] = uiputfile('*.csv','Save Joint Velocities as');
+    csvid = fopen(file2, 'w');
+    fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                 [dQ(6,:); dQ(5,:); dQ(4,:); dQ(3,:); dQ(2,:); dQ(1,:); dQ(7:end,:)]);
+    fclose(csvid);
+  catch
+    disp('Save joint velocities *.csv aborted');
+  end
+
+  try
+    [file3,path] = uiputfile('*.csv','Save Joint Accelerations as');
+    csvid = fopen(file3, 'w');
+    fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                 [ddQ(6,:); ddQ(5,:); ddQ(4,:); ddQ(3,:); ddQ(2,:); ddQ(1,:); ddQ(7:end,:)]);
+    fclose(csvid);
+  catch
+    disp('Save joint accelerations *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+
+
+% --------------------------------------------------------------------
+function angles_save_txt_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  try
+  [file,path] = uiputfile('*.txt','Save Joint Angles as');
+  dlmwrite(file,Q,'delimiter','\t','precision','%.6f')
+  catch
+      disp('Save joint angles *.txt aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+guidata(hObject,handles)
+
+
+% --------------------------------------------------------------------
+function angles_save_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  try
+  [file,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file, 'w');
+  fprintf(csvid, '%1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f, %1.4f \n', Q);
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+guidata(hObject,handles)
+
+
+% --------------------------------------------------------------------
+function angles_save_teo_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  Q = radtodeg(Q);
+  % Change the signs of joints with different orientation
+  Q(:,1) = -Q(:,1);
+  Q(:,7) = -Q(:,7);
+  Q(:,8) = -Q(:,8);
+  Q(:,15) = -Q(:,15);
+  Q(:,17) = -Q(:,17);
+  Q(:,18) = -Q(:,18);
+  Q(:,19) = -Q(:,19);
+  Q(:,20) = -Q(:,20);
+  Q(:,23) = -Q(:,23);
+  Q(:,25) = -Q(:,25);
+  
+  
+  try
+  [file,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file, 'w');
+  fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
+                                                                                                                                   [Q(6,:); Q(5,:); Q(4,:); Q(3,:); Q(2,:); Q(1,:); Q(7:end,:)]);
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+guidata(hObject,handles)
+
+
+% --------------------------------------------------------------------
+function menu_tools_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_tools (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function relative_position_Callback(hObject, eventdata, handles)
+global trajectory d_trajectory dd_trajectory
+global trajectories 
+global q dq ddq
+global data
+
+prevq = trajectories.joints.q;
+prevdq = trajectories.joints.dq;
+prevddq = trajectories.joints.ddq;
+
+[newq, newdq, newddq, support_foot] = joints_space_interpolation(data.trajectory_settings.TEO, data.trajectory_settings.h, trajectories.joints.q(:,1), zeros(26,1), data.trajectory_settings.parameters.Ts);
+
+if (~isempty(newq) && ~isempty(newdq) && ~isempty(newddq))
+  trajectories.joints.q = [newq prevq];
+  trajectories.joints.dq = [newdq prevdq];
+  trajectories.joints.ddq = [newddq prevddq];
+  handles.result.q = trajectories.joints.q;
+  handles.result.dq = trajectories.joints.dq;
+  handles.result.ddq = trajectories.joints.ddq;
+  
+  trajectories.operational.local.trajectory.SF = [support_foot trajectories.operational.local.trajectory.SF];
+  trajectories.operational.local.trajectory.time = 0:data.trajectory_settings.parameters.Ts:(data.trajectory_settings.parameters.Ts*size(trajectories.joints.q,2)-data.trajectory_settings.parameters.Ts);
+ 
+  guidata(hObject,handles)
+
+end

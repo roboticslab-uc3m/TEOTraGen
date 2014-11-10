@@ -1065,6 +1065,52 @@ if isstruct(handles.result)
   %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
   %dQtext = [dQ(1:6,:);dQ(14:17,:);dQ(7:12,:);dQ(19:22,:);dQ(13,:);zeros(1,n);dQ(18,:)];
   %ddQtext = [ddQ(1:6,:);ddQ(14:17,:);ddQ(7:12,:);ddQ(19:22,:);ddQ(13,:);zeros(1,n);ddQ(18,:)];
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  Q = radtodeg(Q);
+  % Change the signs of joints with different orientation
+  Q(:,1) = -Q(:,1);
+  Q(:,7) = -Q(:,7);
+  Q(:,8) = -Q(:,8);
+  Q(:,15) = -Q(:,15);
+  Q(:,17) = -Q(:,17);
+  Q(:,18) = -Q(:,18);
+  Q(:,19) = -Q(:,19);
+  Q(:,20) = -Q(:,20);
+  Q(:,23) = -Q(:,23);
+  Q(:,25) = -Q(:,25);
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  dQ = radtodeg(dQ);
+  % Change the signs of joints with different orientation
+  dQ(:,1) = -dQ(:,1);
+  dQ(:,7) = -dQ(:,7);
+  dQ(:,8) = -dQ(:,8);
+  dQ(:,15) = -dQ(:,15);
+  dQ(:,17) = -dQ(:,17);
+  dQ(:,18) = -dQ(:,18);
+  dQ(:,19) = -dQ(:,19);
+  dQ(:,20) = -dQ(:,20);
+  dQ(:,23) = -dQ(:,23);
+  dQ(:,25) = -dQ(:,25);
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  ddQ = radtodeg(ddQ);
+  % Change the signs of joints with different orientation
+  ddQ(:,1) = -ddQ(:,1);
+  ddQ(:,7) = -ddQ(:,7);
+  ddQ(:,8) = -ddQ(:,8);
+  ddQ(:,15) = -ddQ(:,15);
+  ddQ(:,17) = -ddQ(:,17);
+  ddQ(:,18) = -ddQ(:,18);
+  ddQ(:,19) = -ddQ(:,19);
+  ddQ(:,20) = -ddQ(:,20);
+  ddQ(:,23) = -ddQ(:,23);
+  ddQ(:,25) = -ddQ(:,25);
+  
   try
   [file1,path] = uiputfile('*.csv','Save Joint Angles as');
   csvid = fopen(file1, 'w');
@@ -1106,6 +1152,22 @@ if isstruct(handles.result)
   Q = handles.result.q;
   [m,n] = size(Q);
   %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  Q = radtodeg(Q);
+  % Change the signs of joints with different orientation
+  Q(:,1) = -Q(:,1);
+  Q(:,7) = -Q(:,7);
+  Q(:,8) = -Q(:,8);
+  Q(:,15) = -Q(:,15);
+  Q(:,17) = -Q(:,17);
+  Q(:,18) = -Q(:,18);
+  Q(:,19) = -Q(:,19);
+  Q(:,20) = -Q(:,20);
+  Q(:,23) = -Q(:,23);
+  Q(:,25) = -Q(:,25);
+  
   try
   [file,path] = uiputfile('*.csv','Save Joint Angles as');
   csvid = fopen(file, 'w');

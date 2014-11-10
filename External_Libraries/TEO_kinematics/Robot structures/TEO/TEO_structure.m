@@ -432,15 +432,18 @@ else
     legs.right.joint(5).torque_limits = [2, 4.5] * M2MM^2;
     legs.right.joint(5).relation      = 209 / DEGREE2RAD;
 
+    %legs.right.joint(6).angle_limits  = [-25, 25] * DEGREE2RAD;
     legs.right.joint(6).angle_limits  = [-25, 25] * DEGREE2RAD;
     legs.right.joint(6).torque_limits = [1.5, 3] * M2MM^2;
     legs.right.joint(6).relation      = -209 / DEGREE2RAD;
 
     % Left Leg
+    %legs.left.joint(1).angle_limits  = [-90, 90] * DEGREE2RAD;
     legs.left.joint(1).angle_limits  = [-90, 90] * DEGREE2RAD;
     legs.left.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     legs.left.joint(1).relation      = 209 / DEGREE2RAD;
 
+    %legs.left.joint(2).angle_limits  = [-20, 20] * DEGREE2RAD;
     legs.left.joint(2).angle_limits  = [-20, 20] * DEGREE2RAD;
     legs.left.joint(2).torque_limits = [2, 4.5] * M2MM^2;
     legs.left.joint(2).relation      = 209 / DEGREE2RAD;
@@ -462,34 +465,39 @@ else
     legs.left.joint(6).relation      = -209 / DEGREE2RAD;
 
     % Right Arm
-    arms.right.joint(1).angle_limits  = [-45, 70] * DEGREE2RAD;
+    %arms.right.joint(1).angle_limits  = [-45, 70] * DEGREE2RAD;
+    arms.right.joint(1).angle_limits  = [-70, 45] * DEGREE2RAD;
     arms.right.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(1).relation      = 209 / DEGREE2RAD;
     % In the robot the 0 in the shoulder is -90� w.r.t. to standard convention
     arms.right.joint(1).offset        = -pi/2;
 
-    arms.right.joint(2).angle_limits  = [-15, 70] * DEGREE2RAD;
+    arms.right.joint(2).angle_limits  = [-70, 15] * DEGREE2RAD;
     arms.right.joint(2).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(2).relation      = 209 / DEGREE2RAD;
 
-    arms.right.joint(3).angle_limits  = [-10, 75] * DEGREE2RAD;
+    %arms.right.joint(3).angle_limits  = [-10, 75] * DEGREE2RAD;
+    arms.right.joint(3).angle_limits  = [-75, 10] * DEGREE2RAD;
     arms.right.joint(3).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(3).relation      = 209 / DEGREE2RAD;
 
-    arms.right.joint(4).angle_limits  = [-10, 100] * DEGREE2RAD;
+    %arms.right.joint(4).angle_limits  = [-10, 100] * DEGREE2RAD;
+    arms.right.joint(4).angle_limits  = [-100, 10] * DEGREE2RAD;
     arms.right.joint(4).torque_limits = [1.5, 3] * M2MM^2;
     arms.right.joint(4).relation      = -209 / DEGREE2RAD;
 
+    %arms.right.joint(5).angle_limits  = [-90, 90] * DEGREE2RAD;
     arms.right.joint(5).angle_limits  = [-90, 90] * DEGREE2RAD;
     arms.right.joint(5).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.right.joint(5).relation      = 0;
     
-    arms.right.joint(6).angle_limits  = [-10, 100] * DEGREE2RAD;
+    %arms.right.joint(6).angle_limits  = [-10, 100] * DEGREE2RAD;
+    arms.right.joint(6).angle_limits  = [-100, 10] * DEGREE2RAD;
     arms.right.joint(6).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.right.joint(6).relation      = 0;
 
     % Left Arm
-    arms.left.joint(1).angle_limits  = [-45, 70] * DEGREE2RAD;
+    arms.left.joint(1).angle_limits  = [-70, 45] * DEGREE2RAD;
     arms.left.joint(1).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(1).relation      = 209 / DEGREE2RAD;
     % In the robot the 0 in the shoulder is -90� w.r.t. to standard convention
@@ -499,19 +507,21 @@ else
     arms.left.joint(2).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(2).relation      = 209 / DEGREE2RAD;
 
-    arms.left.joint(3).angle_limits  = [-10, 75] * DEGREE2RAD;
+    %arms.left.joint(3).angle_limits  = [-10, 75] * DEGREE2RAD;
+    arms.left.joint(3).angle_limits  = [-75, 10] * DEGREE2RAD;
     arms.left.joint(3).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(3).relation      = 209 / DEGREE2RAD;
 
-    arms.left.joint(4).angle_limits  = [-10, 100] * DEGREE2RAD;
+    arms.left.joint(4).angle_limits  = [-100, 10] * DEGREE2RAD;
     arms.left.joint(4).torque_limits = [1.5, 3] * M2MM^2;
     arms.left.joint(4).relation      = -209 / DEGREE2RAD;
 
+    %arms.left.joint(5).angle_limits  = [-90, 90] * DEGREE2RAD;
     arms.left.joint(5).angle_limits  = [-90, 90] * DEGREE2RAD;
     arms.left.joint(5).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.left.joint(5).relation      = 0;
     
-    arms.left.joint(6).angle_limits  = [-10, 100] * DEGREE2RAD;
+    arms.left.joint(6).angle_limits  = [-100, 10] * DEGREE2RAD;
     arms.left.joint(6).torque_limits = [0.28, 0.36] * M2MM^2;
     arms.left.joint(6).relation      = 0;
 
