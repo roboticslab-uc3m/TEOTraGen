@@ -147,16 +147,16 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
           % Convert to degrees
           q = radtodeg(q);
           % Change the signs of joints with different orientation
-          q(:,1) = -q(:,1);
-          q(:,7) = -q(:,7);
-          q(:,8) = -q(:,8);
-          q(:,15) = -q(:,15);
-          q(:,17) = -q(:,17);
-          q(:,18) = -q(:,18);
-          q(:,19) = -q(:,19);
-          q(:,20) = -q(:,20);
-          q(:,23) = -q(:,23);
-          q(:,25) = -q(:,25);
+          q(6,:) = -q(6,:);
+          q(7,:) = -q(7,:);
+          q(8,:) = -q(8,:);
+          q(15,:) = -q(15,:);
+          q(17,:) = -q(17,:);
+          q(18,:) = -q(18,:);
+          q(19,:) = -q(19,:);
+          q(20,:) = -q(20,:);
+          q(23,:) = -q(23,:);
+          q(25,:) = -q(25,:);
           
           csvid = fopen(file1, 'w');
           fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
@@ -169,16 +169,16 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
           % Convert to degrees
           dq = radtodeg(dq);
           % Change the signs of joints with different orientation
-          dq(:,1) = -dq(:,1);
-          dq(:,7) = -dq(:,7);
-          dq(:,8) = -dq(:,8);
-          dq(:,15) = -dq(:,15);
-          dq(:,17) = -dq(:,17);
-          dq(:,18) = -dq(:,18);
-          dq(:,19) = -dq(:,19);
-          dq(:,20) = -dq(:,20);
-          dq(:,23) = -dq(:,23);
-          dq(:,25) = -dq(:,25);
+          dq(6,:) = -dq(6,:);
+          dq(7,:) = -dq(7,:);
+          dq(8,:) = -dq(8,:);
+          dq(15,:) = -dq(15,:);
+          dq(17,:) = -dq(17,:);
+          dq(18,:) = -dq(18,:);
+          dq(19,:) = -dq(19,:);
+          dq(20,:) = -dq(20,:);
+          dq(23,:) = -dq(23,:);
+          dq(25,:) = -dq(25,:);
           
           csvid = fopen(file2, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
@@ -191,16 +191,16 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
           % Convert to degrees
           ddq = radtodeg(dq);
           % Change the signs of joints with different orientation
-          ddq(:,1) = -ddq(:,1);
-          ddq(:,7) = -ddq(:,7);
-          ddq(:,8) = -ddq(:,8);
-          ddq(:,15) = -ddq(:,15);
-          ddq(:,17) = -ddq(:,17);
-          ddq(:,18) = -ddq(:,18);
-          ddq(:,19) = -ddq(:,19);
-          ddq(:,20) = -ddq(:,20);
-          ddq(:,23) = -ddq(:,23);
-          ddq(:,25) = -ddq(:,25);
+          ddq(6,:) = -ddq(6,:);
+          ddq(7,:) = -ddq(7,:);
+          ddq(8,:) = -ddq(8,:);
+          ddq(15,:) = -ddq(15,:);
+          ddq(17,:) = -ddq(17,:);
+          ddq(18,:) = -ddq(18,:);
+          ddq(19,:) = -ddq(19,:);
+          ddq(20,:) = -ddq(20,:);
+          ddq(23,:) = -ddq(23,:);
+          ddq(25,:) = -ddq(25,:);
           
           csvid = fopen(file3, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
@@ -215,16 +215,16 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
           % Convert to degrees
           q = radtodeg(q);
           % Change the signs of joints with different orientation
-          q(:,1) = -q(:,1);
-          q(:,7) = -q(:,7);
-          q(:,8) = -q(:,8);
-          q(:,15) = -q(:,15);
-          q(:,17) = -q(:,17);
-          q(:,18) = -q(:,18);
-          q(:,19) = -q(:,19);
-          q(:,20) = -q(:,20);
-          q(:,23) = -q(:,23);
-          q(:,25) = -q(:,25);
+          q(6,:) = -q(6,:);
+          q(7,:) = -q(7,:);
+          q(8,:) = -q(8,:);
+          q(15,:) = -q(15,:);
+          q(17,:) = -q(17,:);
+          q(18,:) = -q(18,:);
+          q(19,:) = -q(19,:);
+          q(20,:) = -q(20,:);
+          q(23,:) = -q(23,:);
+          q(25,:) = -q(25,:);
           
           csvid = fopen(file1, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
@@ -237,16 +237,16 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
           % Convert to degrees
           dq = radtodeg(dq);
           % Change the signs of joints with different orientation
-          dq(:,1) = -dq(:,1);
-          dq(:,7) = -dq(:,7);
-          dq(:,8) = -dq(:,8);
-          dq(:,15) = -dq(:,15);
-          dq(:,17) = -dq(:,17);
-          dq(:,18) = -dq(:,18);
-          dq(:,19) = -dq(:,19);
-          dq(:,20) = -dq(:,20);
-          dq(:,23) = -dq(:,23);
-          dq(:,25) = -dq(:,25);
+          dq(6,:) = -dq(6,:);
+          dq(7,:) = -dq(7,:);
+          dq(8,:) = -dq(8,:);
+          dq(15,:) = -dq(15,:);
+          dq(17,:) = -dq(17,:);
+          dq(18,:) = -dq(18,:);
+          dq(19,:) = -dq(19,:);
+          dq(20,:) = -dq(20,:);
+          dq(23,:) = -dq(23,:);
+          dq(25,:) = -dq(25,:);
           
           csvid = fopen(file2, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
@@ -259,20 +259,20 @@ if (isempty(handles.save_traj) && isempty(handles.save_dtraj) && isempty(handles
           % Convert to degrees
           ddq = radtodeg(dq);
           % Change the signs of joints with different orientation
-          ddq(:,1) = -ddq(:,1);
-          ddq(:,7) = -ddq(:,7);
-          ddq(:,8) = -ddq(:,8);
-          ddq(:,15) = -ddq(:,15);
-          ddq(:,17) = -ddq(:,17);
-          ddq(:,18) = -ddq(:,18);
-          ddq(:,19) = -ddq(:,19);
-          ddq(:,20) = -ddq(:,20);
-          ddq(:,23) = -ddq(:,23);
-          ddq(:,25) = -ddq(:,25);
+          ddq(6,:) = -ddq(6,:);
+          ddq(7,:) = -ddq(7,:);
+          ddq(8,:) = -ddq(8,:);
+          ddq(15,:) = -ddq(15,:);
+          ddq(17,:) = -ddq(17,:);
+          ddq(18,:) = -ddq(18,:);
+          ddq(19,:) = -ddq(19,:);
+          ddq(20,:) = -ddq(20,:);
+          ddq(23,:) = -ddq(23,:);
+          ddq(25,:) = -ddq(25,:);
           
           csvid = fopen(file3, 'w');
           fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
-                                                                                             [ddq(7,:); ddq(8,:); ddq(9,:); ddq(10,:); ddq(11,:); ddq(12,:); ddq(14,:); ddq(6,:); ddq(5,:); ddq(4,:); ddq(3,:); ddq(2,:); ddq(1,:)]);
+                                                                                             [ddq(7,:); ddq(8,:); ddq(9,:); ddq(10,:); ddq(11,:); ddq(12,:); ddq(14,:); ddq(1,:); ddq(2,:); ddq(3,:); ddq(4,:); ddq(5,:); ddq(6,:)]);
           fclose(csvid);   
       end
   catch

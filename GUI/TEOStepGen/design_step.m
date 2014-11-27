@@ -50,11 +50,24 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.Input_data.L_val    = 0.1;
     handles.Input_data.H_val    = 0.08;
 
-    handles.Input_data.q0 = [ 0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;  ... % Right Leg
-                              0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397; ... % Left Leg
-                              0.0349065850398866; 0; ...                                                                                  % Waist
-                              0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                     % Right Arm
-                              0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
+%     handles.Input_data.q0 = [ 0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;  ... % Right Leg
+%                               0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397; ... % Left Leg
+%                               0.0349065850398866; 0; ...                                                                                  % Waist
+%                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                     % Right Arm
+%                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
+
+%     handles.Input_data.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
+%                               0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
+%                               0; 0;...                                                                                                                  % Waist
+%                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
+%                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
+                            
+    handles.Input_data.q0 = [ 0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Right Leg
+                              0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Left Leg                   
+                              0; 0;...                                                                                                                  % Waist
+                              0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
+                              0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
+
   else
   	handles.Input_data = varargin{:};
   end
@@ -416,7 +429,8 @@ if data.nsteps == 0
 end
 
 % Double Step and Simple Step for TEO Robot
-[q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(h,delta, data, support_foot, trajectory, d_trajectory, dd_trajectory);
+
+[q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(h, delta, data, support_foot, trajectory, d_trajectory, dd_trajectory);
 
 
 waitbar(0.7)
@@ -437,20 +451,20 @@ waitbar(0.8)
 set(handles.plot_options, 'Visible', 'On')
 plot_all_graphs(hObject,handles,'PLOT SPACE') % Show joints space by default
 
-  waitbar(0.9)
+waitbar(0.9)
 
-  % Update number of steps
-  data.nsteps = data.nsteps + 1;
+% Update number of steps
+data.nsteps = data.nsteps + 1;
 
-  % Disable generate_step button
-  disable_generate_step_button(hObject, eventdata, handles)
+% Disable generate_step button
+disable_generate_step_button(hObject, eventdata, handles)
 
-  waitbar(1)
-  % Close wait bar when the generation has finished
-  close(waitbar1)
+waitbar(1)
+% Close wait bar when the generation has finished
+close(waitbar1)
 
-  % Update handles structure
-  guidata(hObject, handles);
+% Update handles structure
+guidata(hObject, handles);
 
 
 function disable_generate_step_button(hObject, eventdata, handles)
@@ -932,7 +946,7 @@ guidata(hObject,handles)
 function pushbutton_new_step_Callback(hObject, eventdata, handles)
 global data
 if isstruct(handles.result)
-  q = handles.result.q(:,end);
+  q_end = handles.result.q(:,end);
   % Change support_foot
   if strcmp(handles.support_foot, 'RF')
     support_foot = 'LF';
@@ -954,7 +968,7 @@ if isstruct(handles.result)
   if ~isempty(data)
     data.t0 = data.Tend; % Initial time
     data.Tend = data.t0 + data.T;
-    data.q = q;
+%     data.q = q_end;
   end
   
   % Update title
@@ -1157,22 +1171,174 @@ if isstruct(handles.result)
   % Convert to degrees
   Q = radtodeg(Q);
   % Change the signs of joints with different orientation
-  Q(:,1) = -Q(:,1);
-  Q(:,7) = -Q(:,7);
-  Q(:,8) = -Q(:,8);
-  Q(:,15) = -Q(:,15);
-  Q(:,17) = -Q(:,17);
-  Q(:,18) = -Q(:,18);
-  Q(:,19) = -Q(:,19);
-  Q(:,20) = -Q(:,20);
-  Q(:,23) = -Q(:,23);
-  Q(:,25) = -Q(:,25);
+  Q(6,:) = -Q(6,:);
+  Q(7,:) = -Q(7,:);
+  Q(8,:) = -Q(8,:);
+  Q(15,:) = -Q(15,:);
+  Q(17,:) = -Q(17,:);
+  Q(18,:) = -Q(18,:);
+  Q(19,:) = -Q(19,:);
+  Q(20,:) = -Q(20,:);
+  Q(23,:) = -Q(23,:);
+  Q(25,:) = -Q(25,:);
   
   try
   [file,path] = uiputfile('*.csv','Save Joint Angles as');
   csvid = fopen(file, 'w');
   fprintf(csvid, '%1.2f %1.2f %1.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %1.2f\n',...
                                                                                                                                    [Q(6,:); Q(5,:); Q(4,:); Q(3,:); Q(2,:); Q(1,:); Q(7:end,:)]);
+  fclose(csvid);
+  catch
+      disp('Save joint angles *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+guidata(hObject,handles)
+
+
+% --------------------------------------------------------------------
+function ang_vel_acc_save_teo_13_joints_csv_menu_Callback(hObject, eventdata, handles)
+if isstruct(handles.result)
+  Q = handles.result.q;
+  dQ = handles.result.dq;
+  ddQ = handles.result.ddq;
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  %dQtext = [dQ(1:6,:);dQ(14:17,:);dQ(7:12,:);dQ(19:22,:);dQ(13,:);zeros(1,n);dQ(18,:)];
+  %ddQtext = [ddQ(1:6,:);ddQ(14:17,:);ddQ(7:12,:);ddQ(19:22,:);ddQ(13,:);zeros(1,n);ddQ(18,:)];
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  Q = radtodeg(Q);
+  % Change the signs of joints with different orientation
+  Q(6,:) = -Q(6,:);
+  Q(7,:) = -Q(7,:);
+  Q(8,:) = -Q(8,:);
+  Q(15,:) = -Q(15,:);
+  Q(17,:) = -Q(17,:);
+  Q(18,:) = -Q(18,:);
+  Q(19,:) = -Q(19,:);
+  Q(20,:) = -Q(20,:);
+  Q(23,:) = -Q(23,:);
+  Q(25,:) = -Q(25,:);
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  dQ = radtodeg(dQ);
+  % Change the signs of joints with different orientation
+  dQ(6,:) = -dQ(6,:);
+  dQ(7,:) = -dQ(7,:);
+  dQ(8,:) = -dQ(8,:);
+  dQ(15,:) = -dQ(15,:);
+  dQ(17,:) = -dQ(17,:);
+  dQ(18,:) = -dQ(18,:);
+  dQ(19,:) = -dQ(19,:);
+  dQ(20,:) = -dQ(20,:);
+  dQ(23,:) = -dQ(23,:);
+  dQ(25,:) = -dQ(25,:);
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  ddQ = radtodeg(ddQ);
+  % Change the signs of joints with different orientation
+  ddQ(6,:) = -ddQ(6,:);
+  ddQ(7,:) = -ddQ(7,:);
+  ddQ(8,:) = -ddQ(8,:);
+  ddQ(15,:) = -ddQ(15,:);
+  ddQ(17,:) = -ddQ(17,:);
+  ddQ(18,:) = -ddQ(18,:);
+  ddQ(19,:) = -ddQ(19,:);
+  ddQ(20,:) = -ddQ(20,:);
+  ddQ(23,:) = -ddQ(23,:);
+  ddQ(25,:) = -ddQ(25,:);
+  
+  try
+  [file1,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file1, 'w');
+%     fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+%                                                                                        [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
+    fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
+                                                                                       [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
+  fclose(csvid);
+  catch
+    disp('Save joint angles *.csv aborted');
+  end
+
+  try
+    [file2,path] = uiputfile('*.csv','Save Joint Velocities as');
+    csvid = fopen(file2, 'w');
+%   fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+%                                                                                      [dQ(7,:); dQ(8,:); dQ(9,:); dQ(10,:); dQ(11,:); dQ(12,:); dQ(14,:); dQ(1,:); dQ(2,:); dQ(3,:); dQ(4,:); dQ(5,:); dQ(6,:)]);
+    fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
+                                                                                     [dQ(7,:); dQ(8,:); dQ(9,:); dQ(10,:); dQ(11,:); dQ(12,:); dQ(14,:); dQ(1,:); dQ(2,:); dQ(3,:); dQ(4,:); dQ(5,:); dQ(6,:)]);
+    fclose(csvid);
+  catch
+    disp('Save joint velocities *.csv aborted');
+  end
+
+  try
+    [file3,path] = uiputfile('*.csv','Save Joint Accelerations as');
+    csvid = fopen(file3, 'w');
+%   fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+%                                                                                      [ddQ(7,:); ddQ(8,:); ddQ(9,:); ddQ(10,:); ddQ(11,:); ddQ(12,:); ddQ(14,:); ddQ(1,:); ddQ(2,:); ddQ(3,:); ddQ(4,:); ddQ(5,:); ddQ(6,:)]);
+    fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
+                                                                                     [ddQ(7,:); ddQ(8,:); ddQ(9,:); ddQ(10,:); ddQ(11,:); ddQ(12,:); ddQ(14,:); ddQ(1,:); ddQ(2,:); ddQ(3,:); ddQ(4,:); ddQ(5,:); ddQ(6,:)]);
+    fclose(csvid);
+  catch
+    disp('Save joint accelerations *.csv aborted');
+  end
+else
+  errordlg('There is not any Joint Angles data to save','Save Error')
+  return
+end
+
+
+% --------------------------------------------------------------------
+function angles_save_teo_13_joints_csv_menu_Callback(hObject, eventdata, handles)
+global trajectories
+if isstruct(handles.result)
+  Q = handles.result.q;  
+
+  
+  %TEMPORAL; SOLO PORQUE QUIERO USAR LAS TRAYECTORIAS SATURADAS
+%   prueba = Q;
+%   for ii=1:size(prueba,2)
+%     if prueba(5,ii) < -0.2793,
+%       prueba(5,ii) = -0.2793;
+%     end
+%     if prueba(11,ii) < -0.2793,
+%       prueba(11,ii) = -0.2793;
+%     end
+%   end
+%   Q = prueba;
+  
+  [m,n] = size(Q);
+  %Qtext = [Q(1:6,:);Q(14:17,:);Q(7:12,:);Q(19:22,:);Q(13,:);zeros(1,n);Q(18,:)];
+  
+  % TODO: TEMPORAL CHANGES 10/11/14
+  % Convert to degrees
+  Q = radtodeg(Q);
+  % Change the signs of joints with different orientation  
+  Q(6,:) = -Q(6,:);
+  Q(7,:) = -Q(7,:);
+  Q(8,:) = -Q(8,:);
+  Q(15,:) = -Q(15,:);
+  Q(17,:) = -Q(17,:);
+  Q(18,:) = -Q(18,:);
+  Q(19,:) = -Q(19,:);
+  Q(20,:) = -Q(20,:);
+  Q(23,:) = -Q(23,:);
+  Q(25,:) = -Q(25,:);
+  
+  try
+  [file,path] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(file, 'w');
+%   fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+%                                                                                      [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
+  fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
+                                                                                     [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
   fclose(csvid);
   catch
       disp('Save joint angles *.csv aborted');
