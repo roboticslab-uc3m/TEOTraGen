@@ -8,9 +8,10 @@ TEO = TEO_structure_28DOF('numeric', 'rad', 'm');
 legs_kinematics  = generate_humanoid_legs_kinematics  ([TEO.legs.link_lengths]);
 torso_kinematics = generate_humanoid_torso_kinematics ([TEO.waist.link_lengths], [TEO.torso.link_lengths]);
 arms_kinematics  = generate_humanoid_arms_kinematics  ([TEO.chest.link_lengths], [TEO.arms.link_lengths]);
+head_kinematics  = generate_humanoid_head_kinematics  ([TEO.chest.link_lengths], [TEO.head.link_lengths]);
 
 % Adapt to TEO conventions
 TEO_kinematics_functions = convert_to_TEO_conventions (TEO, legs_kinematics, torso_kinematics, arms_kinematics);
 
 % Create library file for the hoap-3
-create_nested_functions(TEO_kinematics_functions, 'TEO_kinematics_libraryPRUEBAS');
+create_nested_functions(TEO_kinematics_functions, 'TEO_kinematics_library_28DOF');

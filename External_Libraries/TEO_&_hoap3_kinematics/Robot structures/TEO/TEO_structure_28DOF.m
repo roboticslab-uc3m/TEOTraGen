@@ -409,7 +409,7 @@ else
   % Head
   % Rototranslation w.r.t. the waist joint
   head.joint(1).origin = waist.joint(1).origin + [-torso.link_lengths(1) - chest.link_lengths(1); 0; chest.link_lengths(2) + torso.link_lengths(2) + head.link_lengths(1)];
-  head.joint(1).orientation  = id;    
+  head.joint(1).orientation  = ID;    
   head.joint(1).axis = [0, 0, 1];
 
   head.joint(2).origin = head.joint(1).origin + [head.link_lengths(2); 0; 0];
