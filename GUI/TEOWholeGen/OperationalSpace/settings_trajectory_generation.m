@@ -53,31 +53,37 @@ handles.trajectory_settings.units.orient = 'rad';
 handles.trajectory_settings.units.def = 'Relative';
 
 
-% handles.default.q0 = [0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;...  % Right Leg
-%                      0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397;...  % Left Leg
-%                      0.0349065850398866; 0;...                                                                                   % Waist
-%                      -0.261799387799149; -0.167017153300893; 0; -0.734875474523928; 0; 0;...                                     % Right Arm
-%                      -0.261799387799149; 0.167017153300893; 0;  -0.734875474523928; 0; 0];                                       % Left Arm ;
-                   
+% Get Dafault Values from Configuration File
+GUIConfig = getTEOWholeGenConfig();
 
-% handles.default.q0 = [  0.000000002196439; 0.010832397471816; -0.551079679399186; 1.164867614763564; -0.613787939728849; -0.010832398780057; ...  % Right Leg
-%                         0.000000000586019; -0.010832395710800; -0.551079681180760; 1.164867615158001; -0.613787930690068; 0.010832389542969; ...  % Left Leg
+if isfield(GUIConfig, 'q0'),
+  handles.default.q0 = GUIConfig.q0;
+else
+  handles.default.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Right Leg
+                          0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Left Leg 
+                          0; 0; ...                                                               % Waist
+                          0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ... % Right Arm
+                          0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];     % Left Arm
+end
 
+if isfield(GUIConfig, 'Ts'),
+  handles.default.Ts = GUIConfig.Ts;
+else
+  handles.default.Ts = 0.02;
+end
 
-handles.default.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ... % Right Leg
-                                 0; 0; -0.2417; 0.5081; -0.2664; 0; ... % Left Leg 
-                                 0; 0;...                                                                                                                  % Waist
-                                 0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-                                 0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];   
-% handles.default.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
-%                        0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
-%                        0; 0;...                                                                                                                  % Waist
-%                        0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-%                        0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-                     
-handles.default.Ts = 0.02;
-handles.default.kp = 0.01;
-handles.default.ko = pi/8;
+if isfield(GUIConfig, 'kp'),
+  handles.default.kp = GUIConfig.kp;
+else
+  handles.default.kp = 0.01;
+end
+
+if isfield(GUIConfig, 'ko'),
+  handles.default.ko = GUIConfig.ko;
+else
+  handles.default.ko = pi/8;
+end
+
 
 handles.trajectory_settings.parameters.Ts = handles.default.Ts;
 handles.trajectory_settings.parameters.kp = handles.default.kp;
@@ -96,8 +102,15 @@ handles.trajectory_settings.body_parts.LF = 1;
 handles.trajectory_settings.body_parts.CoM = 1;
 handles.trajectory_settings.body_parts.Waist = 1;
 
+
+% Set GUI Edit boxes
+set(handles.Ts_edit,'String',num2str(handles.trajectory_settings.parameters.Ts));
+set(handles.kp_edit,'String',num2str(handles.trajectory_settings.parameters.kp));
+set(handles.ko_edit,'String',num2str(handles.trajectory_settings.parameters.ko));
+
 % Update handles structure
 guidata(hObject, handles);
+
 
 
 function varargout = settings_trajectory_generation_OutputFcn(hObject, eventdata, handles) 
