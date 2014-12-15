@@ -43,30 +43,17 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
   if isempty(varargin)
     % Default values
     handles.Input_data.Ts_val   = 0.01;
-    handles.Input_data.T_val    = 2;  
+    handles.Input_data.T_val    = 5;  
     handles.Input_data.alpha_ds = 0.5;
     handles.Input_data.gamma_com = 0.4;
     handles.Input_data.Leg      = 'Right Leg';
     handles.Input_data.L_val    = 0.1;
-    handles.Input_data.H_val    = 0.08;
-
-%     handles.Input_data.q0 = [ 0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491;  ... % Right Leg
-%                               0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397; ... % Left Leg
-%                               0.0349065850398866; 0; ...                                                                                  % Waist
-%                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                     % Right Arm
-%                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
-
-%     handles.Input_data.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
-%                               0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
-%                               0; 0;...                                                                                                                  % Waist
-%                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-%                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-                            
-    handles.Input_data.q0 = [ 0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Right Leg
-                              0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Left Leg                   
-                              0; 0;...                                                                                                                  % Waist
-                              0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-                              0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
+    handles.Input_data.H_val    = 0.01;
+    handles.Input_data.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Right Leg
+                               0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Left Leg 
+                               0; 0; ...                                                               % Waist
+                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ... % Right Arm
+                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];     % Left Arm
 
   else
   	handles.Input_data = varargin{:};

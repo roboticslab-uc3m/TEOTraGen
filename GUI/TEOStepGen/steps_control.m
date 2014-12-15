@@ -22,7 +22,7 @@ function varargout = steps_control(varargin)
 
 % Edit the above text to modify the response to help steps_control
 
-% Last Modified by GUIDE v2.5 19-Sep-2014 20:26:20
+% Last Modified by GUIDE v2.5 15-Dec-2014 20:39:30
 
 
 
@@ -57,39 +57,85 @@ function steps_control_OpeningFcn(hObject, eventdata, handles, varargin)
   handles.uipanelInitialPosition     = 'Default';
   handles.uipanelLegSupport          = 'Right Leg';
 
+  
+  % Get Data
+  handles.GUIConfig = getTEOStepGenConfig();
+  
+  % Check Values of the Configuration File
+  if isfield(handles.GUIConfig, 'q0'),
+    handles.Input_data.q0 = handles.GUIConfig.q0;
+  else
+    % -0.01 M
+    %   handles.Input_data.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
+    %                     0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
+    %                     0; 0;...                                                                                                                  % Waist
+    %                     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
+    %                     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
+    % -0.025 M   
+    handles.Input_data.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Right Leg
+                               0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Left Leg 
+                               0; 0; ...                                                               % Waist
+                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ... % Right Arm
+                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];     % Left Arm
+  end
+  
+  if isfield(handles.GUIConfig, 'alpha_ds'),
+    handles.Input_data.alpha_ds = handles.GUIConfig.alpha_ds;
+  else
+    handles.Input_data.alpha_ds = 0.5;
+  end
+  
+  if isfield(handles.GUIConfig, 'gamma_com'),
+    handles.Input_data.gamma_com = handles.GUIConfig.gamma_com;
+  else
+    handles.Input_data.gamma_com = 0.4;
+  end
+  
+  if isfield(handles.GUIConfig, 'L_val'),
+    handles.Input_data.L_val = handles.GUIConfig.L_val;
+  else
+    handles.Input_data.L_val    = 0.1;
+  end
+  
+  if isfield(handles.GUIConfig, 'H_val'),
+    handles.Input_data.H_val = handles.GUIConfig.H_val;
+  else
+    handles.Input_data.H_val = 0.01;
+  end
+  
+  if isfield(handles.GUIConfig, 'Ts'),
+    handles.Input_data.Ts_val = handles.GUIConfig.Ts;
+  else
+    handles.Input_data.Ts_val = 0.01;
+  end
+  
+  if isfield(handles.GUIConfig, 'TStep'),
+    handles.Input_data.T_val = handles.GUIConfig.TStep;
+  else
+    handles.Input_data.T_val = 5;
+  end
+  
+  
+  set(handles.editAlphaDS,'String',num2str(handles.Input_data.alpha_ds));
+  set(handles.editGammaCOM,'String',num2str(handles.Input_data.gamma_com));
+  set(handles.editStepLength,'String',num2str(handles.Input_data.L_val));
+  set(handles.editStepHeight,'String',num2str(handles.Input_data.H_val));
+  set(handles.editStepTimeT,'String',num2str(handles.Input_data.T_val));
+  set(handles.editStepTimeTs,'String',num2str(handles.Input_data.Ts_val));
+
+  
+  
   % Update handles structure
   guidata(hObject, handles);
 
-  % Default q0
-  global Input_data
-  
-  
-% -0.01 M
-%   Input_data.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
-%                     0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
-%                     0; 0;...                                                                                                                  % Waist
-%                     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-%                     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-  
-% -0.025 M         
-    Input_data.q0 = [ 0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Right Leg
-                      0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Left Leg                   
-                      0; 0;...                                                                                                                  % Waist
-                      0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-                      0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-
-                  
-                  
-%   Input_data.q0 = [ 0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491; ... % Right Leg
-%                    0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397; ... % Left Leg
-%                    0.0349065850398866; 0; ...                                                                                  % Waist
-%                    0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                     % Right Arm
-%                    0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
                    
   % Show UC3M logo
   axes(handles.UC3M_logo)
   [r,map] = imread('uc3m.png','png');
   image(r); colormap(map); axis off
+  
+% Update handles structure
+guidata(hObject, handles);
   
 % UIWAIT makes steps_control wait for user response (see UIRESUME)
 % uiwait(handles.figureStepsControl);
@@ -126,18 +172,18 @@ end
 
 
 
-function editStepHigh_Callback(hObject, eventdata, handles)
-% hObject    handle to editStepHigh (see GCBO)
+function editStepHeight_Callback(hObject, eventdata, handles)
+% hObject    handle to editStepHeight (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of editStepHigh as text
-%        str2double(get(hObject,'String')) returns contents of editStepHigh as a double
+% Hints: get(hObject,'String') returns contents of editStepHeight as text
+%        str2double(get(hObject,'String')) returns contents of editStepHeight as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function editStepHigh_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editStepHigh (see GCBO)
+function editStepHeight_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editStepHeight (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -195,16 +241,18 @@ end
 
 
 function pushbutton_step_design_Callback(hObject, eventdata, handles)
-global Input_data
+handles.Input_data.Leg = handles.uipanelLegSupport;
+handles.Input_data.L_val = str2double(get(handles.editStepLength,'String'));
+handles.Input_data.H_val = str2double(get(handles.editStepHeight,'String'));
+handles.Input_data.T_val = str2double(get(handles.editStepTimeT,'String'));
+handles.Input_data.Ts_val = str2double(get(handles.editStepTimeTs,'String'));
+handles.Input_data.alpha_ds = str2double(get(handles.editAlphaDS,'String')); % Percentage time for double support phases (1 and 2)
+handles.Input_data.gamma_com = str2double(get(handles.editGammaCOM,'String')); % Percentage of movement in double support
 
-Input_data.Leg = handles.uipanelLegSupport;
-Input_data.L_val = str2double(get(handles.editStepLength,'String'));
-Input_data.H_val = str2double(get(handles.editStepHigh,'String'));
-Input_data.T_val = str2double(get(handles.editStepTimeT,'String'));
-Input_data.Ts_val = str2double(get(handles.editStepTimeTs,'String'));
-Input_data.alpha_ds = str2double(get(handles.editAlphaDS,'String')); % Percentage time for double support phases (1 and 2)
-Input_data.gamma_com = str2double(get(handles.editGammaCOM,'String')); % Percentage of movement in double support
-design_step(Input_data);
+% Update handles structure
+guidata(hObject, handles);
+
+design_step(handles.Input_data);
 close(handles.figureStepsControl)
 
 
@@ -226,8 +274,6 @@ guidata(hObject,handles)
 function uipanelInitialPosition_SelectionChangeFcn(hObject, eventdata, handles)
 % --- Executes when selected object is changed in uipanelInitialPosition.
 
-  global Input_data
-
   new_val = get(eventdata.NewValue,'String');
 
   CSVerror = 0;
@@ -247,18 +293,11 @@ function uipanelInitialPosition_SelectionChangeFcn(hObject, eventdata, handles)
          0; 0;...                                                                                                                  % Waist
          0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
          0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-       
-       
-%          0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
-%   q0 = [ 0; 0.00325683448936741; -0.308647699300050; 0.796421295515307; -0.487773596215257; 0.0278918646012491; ...  % Right Leg
-%          0; 0.00325683448936741; -0.311486990906165; 0.796421295515307; -0.484850796032492; -0.0354911450764397; ... % Left Leg
-%          0.0349065850398866; 0; ...                                                                                  % Waist
-%          0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                     % Right Arm
-%          0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0 ];                                        % Left Arm 
+
 
   switch new_val
     case 'Default'
-     Input_data.q0 = q0;
+     handles.Input_data.q0 = q0;
 
     case 'File' % This read the last row
       [FileCSV PathCSV] = uigetfile({'*.csv'}, 'Choose csv file with the initial configuration');
@@ -280,7 +319,7 @@ function uipanelInitialPosition_SelectionChangeFcn(hObject, eventdata, handles)
                 errorText = 'Wrong size of the csv file loaded! Using default configuration';
               elseif length(configuration) == 26
                 CSVerror = 0;
-                Input_data.q0 = reshape(configuration,26,1);
+                handles.Input_data.q0 = reshape(configuration,26,1);
               end
           end
 
@@ -293,55 +332,29 @@ function uipanelInitialPosition_SelectionChangeFcn(hObject, eventdata, handles)
 
       if CSVerror
         msgbox(errorText, 'Error','error');
-        Input_data.q0 = q0;
+        handles.Input_data.q0 = q0;
       end
 
   end
 
-guidata(hObject,handles)
+% Update handles structure
+guidata(hObject, handles);
 
 
 
 function editAlphaDS_Callback(hObject, eventdata, handles)
-% hObject    handle to editAlphaDS (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editAlphaDS as text
-%        str2double(get(hObject,'String')) returns contents of editAlphaDS as a double
 
 
-% --- Executes during object creation, after setting all properties.
 function editAlphaDS_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editAlphaDS (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-
 function editGammaCOM_Callback(hObject, eventdata, handles)
-% hObject    handle to editGammaCOM (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editGammaCOM as text
-%        str2double(get(hObject,'String')) returns contents of editGammaCOM as a double
 
 
-% --- Executes during object creation, after setting all properties.
 function editGammaCOM_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editGammaCOM (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end

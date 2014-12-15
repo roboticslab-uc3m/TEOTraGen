@@ -66,17 +66,20 @@ else
                           0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];     % Left Arm
 end
 
+
 if isfield(GUIConfig, 'Ts'),
   handles.default.Ts = GUIConfig.Ts;
 else
   handles.default.Ts = 0.02;
 end
 
+
 if isfield(GUIConfig, 'kp'),
   handles.default.kp = GUIConfig.kp;
 else
   handles.default.kp = 0.01;
 end
+
 
 if isfield(GUIConfig, 'ko'),
   handles.default.ko = GUIConfig.ko;
@@ -103,7 +106,7 @@ handles.trajectory_settings.body_parts.CoM = 1;
 handles.trajectory_settings.body_parts.Waist = 1;
 
 
-% Set GUI Edit boxes
+% Set Edit box values
 set(handles.Ts_edit,'String',num2str(handles.trajectory_settings.parameters.Ts));
 set(handles.kp_edit,'String',num2str(handles.trajectory_settings.parameters.kp));
 set(handles.ko_edit,'String',num2str(handles.trajectory_settings.parameters.ko));

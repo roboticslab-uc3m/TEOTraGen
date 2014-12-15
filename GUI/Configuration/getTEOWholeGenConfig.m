@@ -1,6 +1,10 @@
 function TEOWholeGenConfig = getTEOWholeGenConfig(  )
 %GETTEOSTEPGENCONFIG Gets TEOWholeGen default parameters
-%   Detailed explanation goes here
+%   Default parameters:
+%   - q0: Teo Initial Configuration
+%   - Ts: Sample Time
+%   - kp: IK Position Gain
+%   - kp: IK Orientation Gain
 
 
 % #########################
@@ -11,16 +15,16 @@ q0 =   [ ...
         % Right Leg
         0;                    ... % Right Hip Yaw
         0;                    ... % Right Hip Roll
-        -0.2417;              ... % Right Hip Pitch
-        0.5081;               ... % Right Knee Pitch
-        -0.2664;              ... % Right Ankle Pitch
+        -0.2701;              ... % Right Hip Pitch
+        0.5680;               ... % Right Knee Pitch
+        -0.2979;              ... % Right Ankle Pitch
         0;                    ... % Right Ankle Roll
         % Left Leg 
         0;                    ... % Left Hip Yaw
         0;                    ... % Left Hip Roll 
-        -0.2417;              ... % Left Hip Pitch
-        0.5081;               ... % Left Knee Pitch
-        -0.2664;              ... % Left Ankle Pitch
+        -0.2701;              ... % Left Hip Pitch
+        0.5680;               ... % Left Knee Pitch
+        -0.2979;              ... % Left Ankle Pitch
         0;                    ... % Left Ankle Roll
         % Torso
         0;                    ... % Torso Yaw
