@@ -54,7 +54,7 @@ handles.trajectory_settings.units.def = 'Relative';
 
 
 % Get Dafault Values from Configuration File
-GUIConfig = getTEOWholeGenConfig();
+GUIConfig = TEOWholeGenConfig();
 
 if isfield(GUIConfig, 'q0'),
   handles.default.q0 = GUIConfig.q0;

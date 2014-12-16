@@ -1,14 +1,10 @@
-function TEOStepGenConfig = getTEOStepGenConfig( input_args )
-%GETTEOSTEPGENCONFIG Summary of this function goes here
+function Config = TEOWholeGenConfig(  )
+%GETTEOSTEPGENCONFIG Gets TEOWholeGen default parameters
 %   Default parameters:
 %   - q0: Teo Initial Configuration
 %   - Ts: Sample Time
-%   - alpha_ds: Percentage of Time for Double Support
-%   - gamma_com: Step length due to CoM
-%   - L_val: Step Length (m)
-%   - H_val: Step Height (m)
-%   - TStep: Step Time (s)
-
+%   - kp: IK Position Gain
+%   - kp: IK Orientation Gain
 
 
 % #########################
@@ -50,56 +46,38 @@ q0 =   [ ...
         ];
 
 
-% ################
-% SAMPLE TIME (s)
-% ################
+% ############
+% SAMPLE TIME
+% ############
 
 Ts = 0.01;
 
 
-% ######################################
-% PERCENTAGE OF TIME FOR DOUBLE SUPPORT
-% ######################################
-% (Between 0 and 1)
-alpha_ds = 0.5;
+
+% #################
+% IK POSITION GAIN
+% #################
+
+kp = 0.01;
+
+
+% ####################
+% IK ORIENTATION GAIN
+% ####################
+
+ko = pi/8;
 
 
 
-% ##################################
-% PERCENTAGE STEP LENGTH DUE TO CoM
-% ##################################
-% (Between 0 and 1)
-gamma_com = 0.4;
 
 
 
-% ################
-% STEP LENGTH (m)
-% ################
-L_val = 0.1;
-
-
-
-% ################
-% STEP HEIGHT (m)
-% ################
-H_val = 0.01;
-
-% ################
-% STEP TIME (s)
-% ################
-TStep = 5;
 
 % Output
 
-TEOStepGenConfig.q0 = q0;
-TEOStepGenConfig.alpha_ds = alpha_ds;
-TEOStepGenConfig.gamma_com = gamma_com;
-TEOStepGenConfig.L_val = L_val;
-TEOStepGenConfig.H_val = H_val;
-TEOStepGenConfig.TStep = TStep;
-TEOStepGenConfig.Ts = Ts;
-
+Config.q0 = q0;
+Config.Ts = Ts;
+Config.kp = kp;
+Config.ko = ko;
 
 end
-

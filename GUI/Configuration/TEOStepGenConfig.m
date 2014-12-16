@@ -1,10 +1,15 @@
-function TEOWholeGenConfig = getTEOWholeGenConfig(  )
-%GETTEOSTEPGENCONFIG Gets TEOWholeGen default parameters
+function Config = TEOStepGenConfig( input_args )
+%GETTEOSTEPGENCONFIG Summary of this function goes here
 %   Default parameters:
 %   - q0: Teo Initial Configuration
 %   - Ts: Sample Time
-%   - kp: IK Position Gain
-%   - kp: IK Orientation Gain
+%   - alpha_ds: Percentage of Time for Double Support
+%   - gamma_com: Percentage of Step length due to CoM
+%   - L_val: Step Length (m)
+%   - H_val: Step Height (m)
+%   - TStep: Step Time (s)
+%   - InitialSupportLeg: Initial Support Leg
+
 
 
 % #########################
@@ -46,11 +51,55 @@ q0 =   [ ...
         ];
 
 
-% ############
-% SAMPLE TIME
-% ############
+% ################
+% SAMPLE TIME (s)
+% ################
 
-Ts = 0.09;
+Ts = 0.01;
+
+
+% ######################################
+% PERCENTAGE OF TIME FOR DOUBLE SUPPORT
+% ######################################
+% (Between 0 and 1)
+alpha_ds = 0.5;
+
+
+
+% ##################################
+% PERCENTAGE STEP LENGTH DUE TO CoM
+% ##################################
+% (Between 0 and 1)
+gamma_com = 0.4;
+
+
+
+% ################
+% STEP LENGTH (m)
+% ################
+L_val = 0.1;
+
+
+
+% ################
+% STEP HEIGHT (m)
+% ################
+H_val = 0.01;
+
+
+
+% ################
+% STEP TIME (s)
+% ################
+TStep = 5;
+
+
+
+% ####################
+% INITIAL SUPPORT LEG
+% ####################
+% ('Right' or 'Left')
+InitialSupportLeg = 'Right';
 
 
 
@@ -59,6 +108,7 @@ Ts = 0.09;
 % #################
 
 kp = 0.01;
+
 
 
 % ####################
@@ -75,9 +125,17 @@ ko = pi/8;
 
 % Output
 
-TEOWholeGenConfig.q0 = q0;
-TEOWholeGenConfig.Ts = Ts;
-TEOWholeGenConfig.kp = kp;
-TEOWholeGenConfig.ko = ko;
+Config.q0 = q0;
+Config.alpha_ds = alpha_ds;
+Config.gamma_com = gamma_com;
+Config.L_val = L_val;
+Config.H_val = H_val;
+Config.TStep = TStep;
+Config.Ts = Ts;
+Config.InitialSupportLeg = InitialSupportLeg;
+Config.kp = kp;
+Config.ko = ko;
+
 
 end
+

@@ -59,7 +59,7 @@ function steps_control_OpeningFcn(hObject, eventdata, handles, varargin)
 
   
   % Get Data
-  handles.GUIConfig = getTEOStepGenConfig();
+  handles.GUIConfig = TEOStepGenConfig();
   
   % Check Values of the Configuration File
   if isfield(handles.GUIConfig, 'q0'),
@@ -94,7 +94,7 @@ function steps_control_OpeningFcn(hObject, eventdata, handles, varargin)
   if isfield(handles.GUIConfig, 'L_val'),
     handles.Input_data.L_val = handles.GUIConfig.L_val;
   else
-    handles.Input_data.L_val    = 0.1;
+    handles.Input_data.L_val	= 0.1;
   end
   
   if isfield(handles.GUIConfig, 'H_val'),
@@ -115,6 +115,23 @@ function steps_control_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.Input_data.T_val = 5;
   end
   
+  if isfield(handles.GUIConfig, 'InitialSupportLeg'),
+    handles.Input_data.SupportLeg = handles.GUIConfig.InitialSupportLeg;
+  else
+    handles.Input_data.SupportLeg = 'Right';
+  end
+
+  if isfield(handles.GUIConfig, 'kp'),
+    handles.parameters.kp = handles.GUIConfig.kp;
+  else
+    handles.parameters.kp = 0.01;
+  end
+
+  if isfield(handles.GUIConfig, 'ko'),
+    handles.parameters.ko = handles.GUIConfig.ko;
+  else
+    handles.parameters.ko = pi/8;
+  end
   
   set(handles.editAlphaDS,'String',num2str(handles.Input_data.alpha_ds));
   set(handles.editGammaCOM,'String',num2str(handles.Input_data.gamma_com));
@@ -241,7 +258,7 @@ end
 
 
 function pushbutton_step_design_Callback(hObject, eventdata, handles)
-handles.Input_data.Leg = handles.uipanelLegSupport;
+handles.Input_data.SupportLeg = handles.uipanelLegSupport;
 handles.Input_data.L_val = str2double(get(handles.editStepLength,'String'));
 handles.Input_data.H_val = str2double(get(handles.editStepHeight,'String'));
 handles.Input_data.T_val = str2double(get(handles.editStepTimeT,'String'));
@@ -278,26 +295,9 @@ function uipanelInitialPosition_SelectionChangeFcn(hObject, eventdata, handles)
 
   CSVerror = 0;
 
-  % Default q0
-  
-  % -0.01 M
-%   q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
-%          0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
-%          0; 0;...                                                                                                                  % Waist
-%          0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-%          0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-  
-  % -0.025 M
-  q0 = [ 0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Right Leg
-         0; 0; -0.2701; 0.5680; -0.2979; 0; ... % Left Leg                   
-         0; 0;...                                                                                                                  % Waist
-         0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-         0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-
-
   switch new_val
     case 'Default'
-     handles.Input_data.q0 = q0;
+     handles.Input_data.q0 = handles.GUIConfig.q0;
 
     case 'File' % This read the last row
       [FileCSV PathCSV] = uigetfile({'*.csv'}, 'Choose csv file with the initial configuration');
@@ -332,7 +332,7 @@ function uipanelInitialPosition_SelectionChangeFcn(hObject, eventdata, handles)
 
       if CSVerror
         msgbox(errorText, 'Error','error');
-        handles.Input_data.q0 = q0;
+        handles.Input_data.q0 = handles.GUIConfig.q0;
       end
 
   end

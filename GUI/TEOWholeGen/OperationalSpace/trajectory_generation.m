@@ -69,7 +69,6 @@ if isempty(varargin)
   settings_trajectory_generation;
   return;
 else
-
   data.trajectory_settings = varargin{1};
   trajectories.operational = varargin{2};
   trajectories.Inertialtrajectories = varargin{3};
@@ -86,24 +85,24 @@ set(handles.Ts_val,'String', data.trajectory_settings.parameters.Ts);
 
 % Enable/Disable generation for corresponding humanoid part
 if data.trajectory_settings.body_parts.CoM == 0
-    set(handles.CoM_button,'Enable','off');
-    disp('Disable CoM generation');
+  set(handles.CoM_button,'Enable','off');
+  disp('Disable CoM generation');
 end
 if data.trajectory_settings.body_parts.RF == 0
-    set(handles.RF_button,'Enable','off');
-    disp('Disable RF generation');
+  set(handles.RF_button,'Enable','off');
+  disp('Disable RF generation');
 end
 if data.trajectory_settings.body_parts.LF == 0
-    set(handles.LF_button,'Enable','off');
-    disp('Disable LF generation');
+  set(handles.LF_button,'Enable','off');
+  disp('Disable LF generation');
 end
 if data.trajectory_settings.body_parts.RH == 0
-    set(handles.RH_button,'Enable','off');
-    disp('Disable RH generation');
+  set(handles.RH_button,'Enable','off');
+  disp('Disable RH generation');
 end
 if data.trajectory_settings.body_parts.LH == 0
-    set(handles.LH_button,'Enable','off');
-    disp('Disable LH generation');
+  set(handles.LH_button,'Enable','off');
+  disp('Disable LH generation');
 end
 waitbar(0.5);
 
@@ -166,9 +165,6 @@ waitbar(0.9);
 guidata(hObject, handles);
 waitbar(1);
 close(waitbarOpening)
-
-
-
 % UIWAIT makes trajectory_generation wait for user response (see UIRESUME)
 % uiwait(handles.trajectory_generation);
 
@@ -191,37 +187,37 @@ guidata(hObject,handles)
 
 function support_popup_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
 function t0_text_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
 function T_text_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
 function t0_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
 function T_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
 function Ts_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+	set(hObject,'BackgroundColor','white');
 end
 
 
@@ -230,52 +226,52 @@ global data
 contents = cellstr(get(hObject,'String'));
 data.trajectory_points.interpola_pos.(data.trajectory_points.current_humanoid_part){data.stretchs.number} = contents{get(hObject,'Value')};
 if contents{get(hObject,'Value')} == 2
-    set(handles.label_points,'String','No Circular interpolation implemented yet!');
-    set(handles.label_points,'BackGroundColor',[1 0.2 0.2]);
+  set(handles.label_points,'String','No Circular interpolation implemented yet!');
+  set(handles.label_points,'BackGroundColor',[1 0.2 0.2]);
 else
-    set(handles.label_points,'String','');
-    set(handles.label_points,'BackGroundColor',[0.702 0.78 1]);
+  set(handles.label_points,'String','');
+  set(handles.label_points,'BackGroundColor',[0.702 0.78 1]);
 end
 
 
 function interpola_pos_popup_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 function xf_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function yf_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function zf_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function xi_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function yi_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function zi_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
@@ -287,25 +283,25 @@ data.trajectory_points.interpola_orient.(data.trajectory_points.current_humanoid
 
 function interpola_orient_popup_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function yawf_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function pitchf_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
 function rollf_val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+  set(hObject,'BackgroundColor','white');
 end
 
 
@@ -765,81 +761,81 @@ end
   
   
 % Diff or Abs
-  if strcmp(data.trajectory_points.pos_diff.(data.trajectory_points.current_humanoid_part)(data.stretchs.number),'Diff')
-    set (handles.diff_pos_button,'Value',1.0);
-  else
-    set (handles.abs_pos_button,'Value',1.0);
-  end
-  if strcmp(data.trajectory_points.orient_diff.(data.trajectory_points.current_humanoid_part)(data.stretchs.number),'Diff')
-    set (handles.diff_orient_button,'Value',1.0);
-  else
-    set (handles.abs_orient_button,'Value',1.0);
-  end
-  if strcmp(data.trajectory_points.time_diff.(data.trajectory_points.current_humanoid_part)(data.stretchs.number),'Diff')
-    set (handles.diff_time_button,'Value',1.0);
-  else
-    set (handles.abs_time_button,'Value',1.0);
-  end
+if strcmp(data.trajectory_points.pos_diff.(data.trajectory_points.current_humanoid_part)(data.stretchs.number),'Diff')
+  set (handles.diff_pos_button,'Value',1.0);
+else
+  set (handles.abs_pos_button,'Value',1.0);
+end
+if strcmp(data.trajectory_points.orient_diff.(data.trajectory_points.current_humanoid_part)(data.stretchs.number),'Diff')
+  set (handles.diff_orient_button,'Value',1.0);
+else
+  set (handles.abs_orient_button,'Value',1.0);
+end
+if strcmp(data.trajectory_points.time_diff.(data.trajectory_points.current_humanoid_part)(data.stretchs.number),'Diff')
+  set (handles.diff_time_button,'Value',1.0);
+else
+  set (handles.abs_time_button,'Value',1.0);
+end
   
 
 % Times
-  set (handles.T_val,'String',num2str(data.trajectory_points.T_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)))
-  if data.stretchs.number == 1
-    set (handles.t0_val,'String',num2str(data.trajectory_points.t0_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)));
-    set (handles.Ts_val,'String',num2str(data.trajectory_points.Ts_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)));
+set (handles.T_val,'String',num2str(data.trajectory_points.T_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)))
+if data.stretchs.number == 1
+  set (handles.t0_val,'String',num2str(data.trajectory_points.t0_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)));
+  set (handles.Ts_val,'String',num2str(data.trajectory_points.Ts_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)));
+else
+  set (handles.Ts_val,'String',num2str(data.trajectory_points.Ts_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1))) 
+  if strcmp(data.trajectory_points.orient_diff.(data.trajectory_points.current_humanoid_part){data.stretchs.number-1},'Diff')
+    set (handles.t0_val,'String',num2str(data.trajectory_points.t0_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1)+data.trajectory_points.T_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1)));
+  elseif strcmp(data.trajectory_points.orient_diff.(data.trajectory_points.current_humanoid_part){data.stretchs.number-1},'Abs')
+    set (handles.t0_val,'String',num2str(data.trajectory_points.T_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1)));
   else
-    set (handles.Ts_val,'String',num2str(data.trajectory_points.Ts_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1))) 
-    if strcmp(data.trajectory_points.orient_diff.(data.trajectory_points.current_humanoid_part){data.stretchs.number-1},'Diff')
-      set (handles.t0_val,'String',num2str(data.trajectory_points.t0_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1)+data.trajectory_points.T_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1)));
-    elseif strcmp(data.trajectory_points.orient_diff.(data.trajectory_points.current_humanoid_part){data.stretchs.number-1},'Abs')
-      set (handles.t0_val,'String',num2str(data.trajectory_points.T_val.(data.trajectory_points.current_humanoid_part)(data.stretchs.number-1)));
-    else
-      disp('ERROR: No diff/abs time option')
-    end  
-  end
+    disp('ERROR: No diff/abs time option')
+  end  
+end
 
 
 % Interpolations
 switch data.trajectory_points.interpola_pos.(data.trajectory_points.current_humanoid_part){data.stretchs.number}
   case 'Linear'
-      set(handles.interpola_pos_popup,'Value',1);
+    set(handles.interpola_pos_popup,'Value',1);
   case 'Circular'
-      set(handles.interpola_pos_popup,'Value',2);
+    set(handles.interpola_pos_popup,'Value',2);
   case 'Spline'
-      set(handles.interpola_pos_popup,'Value',3);
+    set(handles.interpola_pos_popup,'Value',3);
   case 'Polynomial3'
-      set(handles.interpola_pos_popup,'Value',4);
+    set(handles.interpola_pos_popup,'Value',4);
   case 'Cubic Spline'
-      set(handles.interpola_pos_popup,'Value',5);
+    set(handles.interpola_pos_popup,'Value',5);
   case 'Polynomial5'
-      set(handles.interpola_pos_popup,'Value',6);
+    set(handles.interpola_pos_popup,'Value',6);
   case 'Polynomial7'
-      set(handles.interpola_pos_popup,'Value',7);
+    set(handles.interpola_pos_popup,'Value',7);
 end
 
 switch data.trajectory_points.interpola_orient.(data.trajectory_points.current_humanoid_part){data.stretchs.number}
   case 'Linear'
-      set(handles.interpola_orient_popup,'Value',1);
+    set(handles.interpola_orient_popup,'Value',1);
   case 'Spline'
-      set(handles.interpola_orient_popup,'Value',2);
+    set(handles.interpola_orient_popup,'Value',2);
   case 'Polynomial3'
-      set(handles.interpola_orient_popup,'Value',3);
+    set(handles.interpola_orient_popup,'Value',3);
   case 'Cubic Spline'
-      set(handles.interpola_orient_popup,'Value',4);
+    set(handles.interpola_orient_popup,'Value',4);
   case 'Polynomial5'
-      set(handles.interpola_orient_popup,'Value',5);
+    set(handles.interpola_orient_popup,'Value',5);
   case 'Polynomial7'
-      set(handles.interpola_orient_popup,'Value',6);
+    set(handles.interpola_orient_popup,'Value',6);
 end
 
 % Support foot
 switch data.trajectory_points.support_foot.(data.trajectory_points.current_humanoid_part)(data.stretchs.number)
   case 0
-      set(handles.support_popup,'Value',1);
+    set(handles.support_popup,'Value',1);
   case -1
-      set(handles.support_popup,'Value',2);
+    set(handles.support_popup,'Value',2);
   case 1
-      set(handles.support_popup,'Value',3);
+    set(handles.support_popup,'Value',3);
 end
     
     
@@ -904,18 +900,18 @@ total_points = str2double(get(hObject,'String'));
 
 % Check the correct number of points
 if ((total_points<1)||(round(total_points) ~= total_points))
-    warndlg('ERROR: Number of points has to be an integer greater than 1','Points Error');
-    if isnan(total_points),
-      total_points = data.trajectory_settings.total_points; % Use previous total_points
-    else
-      total_points = floor(total_points);
-    end
-    
-    if total_points<1
-        total_points = 1;
-    else
-        set(hObject,'String',num2str(total_points));
-    end
+  warndlg('ERROR: Number of points has to be an integer greater than 1','Points Error');
+  if isnan(total_points),
+    total_points = data.trajectory_settings.total_points; % Use previous total_points
+  else
+    total_points = floor(total_points);
+  end
+  
+  if total_points<1
+      total_points = 1;
+  else
+      set(hObject,'String',num2str(total_points));
+  end
 end
 
 prev_total_points = data.trajectory_settings.total_points;
@@ -939,7 +935,7 @@ update_stretch_popup(hObject, handles)
 
 function num_points_text_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject, 'BackgroundColor', 'white');
+  set(hObject, 'BackgroundColor', 'white');
 end
 
 
@@ -961,9 +957,9 @@ end
 
 
 function stretch_trajectory_popup_CreateFcn(hObject, eventdata, handles)
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
+  if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+      set(hObject,'BackgroundColor','white');
+  end
 
     
 function add_default_data(hObject, handles)
@@ -1105,15 +1101,15 @@ pose_rpy = (trajectories.operational.trajectory.(data.trajectory_points.current_
 pose_tr=zeros(4,4,size(pose_rpy,1));
 
 for i = 1:size(pose_rpy,1)
-    pose_tr(:,:,i) = transl(pose_rpy(i,1:3)) * rpy2tr(pose_rpy(i,4:6));
+  pose_tr(:,:,i) = transl(pose_rpy(i,1:3)) * rpy2tr(pose_rpy(i,4:6));
 end
 try
-    set(handles.label_points,'String','');
-    set(handles.label_points,'BackGroundColor',[0.702 0.78 1]);
-    figure(60),title(['Humanoid Axes: ' data.trajectory_points.current_humanoid_part '   ---   Ts = ' num2str(data.trajectory_settings.parameters.Ts)]),tranimate(pose_tr);
+  set(handles.label_points,'String','');
+  set(handles.label_points,'BackGroundColor',[0.702 0.78 1]);
+  figure(60),title(['Humanoid Axes: ' data.trajectory_points.current_humanoid_part '   ---   Ts = ' num2str(data.trajectory_settings.parameters.Ts)]),tranimate(pose_tr);
 catch
-    set(handles.label_points,'String','Visualize Axis Movement aborted!');
-    set(handles.label_points,'BackGroundColor',[1 1 0.2]); 
+  set(handles.label_points,'String','Visualize Axis Movement aborted!');
+  set(handles.label_points,'BackGroundColor',[1 1 0.2]); 
 end
 
 

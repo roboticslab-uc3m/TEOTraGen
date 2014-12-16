@@ -18,13 +18,13 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-    gui_State.gui_Callback = str2func(varargin{1});
+	gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+	[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});
+	gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
 
@@ -41,20 +41,83 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
 
   % Assign Input Data
   if isempty(varargin)
-    % Default values
-    handles.Input_data.Ts_val   = 0.01;
-    handles.Input_data.T_val    = 5;  
-    handles.Input_data.alpha_ds = 0.5;
-    handles.Input_data.gamma_com = 0.4;
-    handles.Input_data.Leg      = 'Right Leg';
-    handles.Input_data.L_val    = 0.1;
-    handles.Input_data.H_val    = 0.01;
-    handles.Input_data.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Right Leg
-                               0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Left Leg 
-                               0; 0; ...                                                               % Waist
-                               0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ... % Right Arm
-                               0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];     % Left Arm
 
+    % Get Data
+    handles.GUIConfig = TEOStepGenConfig();
+
+    % Check Values of the Configuration File
+    if isfield(handles.GUIConfig, 'q0'),
+      handles.Input_data.q0 = handles.GUIConfig.q0;
+    else
+      % -0.01 M
+      %   handles.Input_data.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
+      %                     0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
+      %                     0; 0;...                                                                                                                  % Waist
+      %                     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
+      %                     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
+      % -0.025 M   
+      handles.Input_data.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Right Leg
+                                 0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Left Leg 
+                                 0; 0; ...                                                               % Waist
+                                 0.42; -0.167017153300893; 0; -1.25; 0; 0; ... % Right Arm
+                                 0.42; 0.167017153300893; 0; -1.25; 0; 0];     % Left Arm
+    end
+
+    if isfield(handles.GUIConfig, 'alpha_ds'),
+      handles.Input_data.alpha_ds = handles.GUIConfig.alpha_ds;
+    else
+      handles.Input_data.alpha_ds = 0.5;
+    end
+
+    if isfield(handles.GUIConfig, 'gamma_com'),
+      handles.Input_data.gamma_com = handles.GUIConfig.gamma_com;
+    else
+      handles.Input_data.gamma_com = 0.4;
+    end
+
+    if isfield(handles.GUIConfig, 'L_val'),
+      handles.Input_data.L_val = handles.GUIConfig.L_val;
+    else
+      handles.Input_data.L_val    = 0.1;
+    end
+
+    if isfield(handles.GUIConfig, 'H_val'),
+      handles.Input_data.H_val = handles.GUIConfig.H_val;
+    else
+      handles.Input_data.H_val = 0.01;
+    end
+
+    if isfield(handles.GUIConfig, 'Ts'),
+      handles.Input_data.Ts_val = handles.GUIConfig.Ts;
+    else
+      handles.Input_data.Ts_val = 0.01;
+    end
+
+    if isfield(handles.GUIConfig, 'TStep'),
+      handles.Input_data.T_val = handles.GUIConfig.TStep;
+    else
+      handles.Input_data.T_val = 5;
+    end
+
+    if isfield(handles.GUIConfig, 'InitialSupportLeg'),
+      handles.Input_data.SupportLeg = handles.GUIConfig.InitialSupportLeg;
+    else
+      handles.Input_data.SupportLeg = 'Right';
+    end
+
+    if isfield(handles.GUIConfig, 'kp'),
+      handles.parameters.kp = handles.GUIConfig.kp;
+    else
+      handles.parameters.kp = 0.01;
+    end
+    
+    if isfield(handles.GUIConfig, 'ko'),
+      handles.parameters.ko = handles.GUIConfig.ko;
+    else
+      handles.parameters.ko = pi/8;
+    end
+        
+    
   else
   	handles.Input_data = varargin{:};
   end
@@ -67,8 +130,6 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
   handles.interpola_RH      = 'Polynomial5';
   handles.interpola_LH      = 'Polynomial5';
   
-  handles.parameters.kp = 0.01;
-  handles.parameters.ko = pi/8;
   handles.result = 0;
 
   % Load TEO Kinematics Library and Structure
@@ -80,14 +141,14 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
   guidata(hObject, handles);
 
   % Update window title
-  set(handles.text_title, 'String', strcat('DESIGN STEP - ', ' ', handles.Input_data.Leg, ' Support'));
+  set(handles.text_title, 'String', strcat('DESIGN STEP - ', ' ', handles.Input_data.SupportLeg, ' Support'));
   
   % Assign support_foot variable
-  switch handles.Input_data.Leg
-    case 'Right Leg' % Support on right foot
+  switch handles.Input_data.SupportLeg
+    case 'Right' % Support on right foot
       support_foot = 'RF';
 
-    case 'Left Leg' % Support on left foot
+    case 'Left' % Support on left foot
       support_foot = 'LF';    
   end
   handles.support_foot = support_foot;
@@ -337,7 +398,7 @@ data.alpha_ds = handles.Input_data.alpha_ds;    % Percentage of the total time f
 data.gamma_com = handles.Input_data.gamma_com;    % Percentage of the total time for support foot ???
 data.L = handles.Input_data.L_val;              % Length of the step (X direction)
 data.H = handles.Input_data.H_val;              % Height of the step (Z direction)
-                % Initial pose
+
     
 % Delta Data
 global delta
@@ -937,10 +998,10 @@ if isstruct(handles.result)
   % Change support_foot
   if strcmp(handles.support_foot, 'RF')
     support_foot = 'LF';
-    Leg = 'Left Leg';
+    Leg = 'Left';
   else
     support_foot = 'RF';
-    Leg = 'Right Leg';
+    Leg = 'Right';
   end
 
   handles.support_foot = support_foot;
