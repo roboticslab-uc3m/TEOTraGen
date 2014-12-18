@@ -55,7 +55,7 @@ function steps_control_OpeningFcn(hObject, eventdata, handles, varargin)
 
   % Default variables
   handles.uipanelInitialPosition     = 'Default';
-  handles.uipanelLegSupport          = 'Right Leg';
+  handles.uipanelLegSupport          = 'Right';
 
   
   % Get Data

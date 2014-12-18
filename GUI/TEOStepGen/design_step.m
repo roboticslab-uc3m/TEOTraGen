@@ -108,13 +108,15 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
     if isfield(handles.GUIConfig, 'kp'),
       handles.parameters.kp = handles.GUIConfig.kp;
     else
-      handles.parameters.kp = 0.01;
+%       handles.parameters.kp = 0.01;
+      handles.parameters.kp = 20;
     end
     
     if isfield(handles.GUIConfig, 'ko'),
       handles.parameters.ko = handles.GUIConfig.ko;
     else
-      handles.parameters.ko = pi/8;
+%       handles.parameters.ko = pi/8;
+      handles.parameters.ko = 1;
     end
         
     
@@ -147,9 +149,19 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
   switch handles.Input_data.SupportLeg
     case 'Right' % Support on right foot
       support_foot = 'RF';
-
+  
+    case 'Right Leg'
+      support_foot = 'RF';
+      
     case 'Left' % Support on left foot
-      support_foot = 'LF';    
+      support_foot = 'LF';
+    
+    case 'Left Leg'
+      support_foot = 'LF';
+      
+    otherwise
+      error('TEOStepGen:Error','Wrong support_foot option');
+      
   end
   handles.support_foot = support_foot;
   
@@ -398,6 +410,9 @@ data.alpha_ds = handles.Input_data.alpha_ds;    % Percentage of the total time f
 data.gamma_com = handles.Input_data.gamma_com;    % Percentage of the total time for support foot ???
 data.L = handles.Input_data.L_val;              % Length of the step (X direction)
 data.H = handles.Input_data.H_val;              % Height of the step (Z direction)
+
+data.kp = handles.parameters.kp;
+data.ko = handles.parameters.ko;
 
     
 % Delta Data

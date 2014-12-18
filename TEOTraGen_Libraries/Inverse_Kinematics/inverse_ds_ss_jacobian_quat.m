@@ -37,21 +37,21 @@ function [q, dq, ddq] = inverse_ds_ss_jacobian_quat(q0, trajectory, d_trajectory
 
                 
 if nargin < 5,
-  parameters.kp = 20*eye(3);
-  parameters.ko = 1*eye(3);
+  parameters.kp = 20;
+  parameters.ko = 1;
 end
                 
-            
+
 % Inverse Kinematics for Left Leg Support in Simple Support (Using
 % Jacobian with unit quaternions)
 
 % Parameters and Variables needed
-    L = length(trajectory.time);
-    q  = zeros(size(q0,1), L);
-    dq = zeros(size(q0,1), L);
+  L = length(trajectory.time);
+  q  = zeros(size(q0,1), L);
+  dq = zeros(size(q0,1), L);
 %     ddq = zeros(size(q0,1), L); % Return accelerations (ddq) considering
 %     velocities (dq) diff, at bottom
-    Ts = trajectory.Ts;
+  Ts = trajectory.Ts;
 
 % Position and Orientation Gain
     Kp = parameters.kp;

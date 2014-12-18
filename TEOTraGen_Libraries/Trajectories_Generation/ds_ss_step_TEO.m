@@ -26,69 +26,72 @@ function [q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(
 
 
 % INPUTS
-    % Steps Data
-    L = data.L;     % Step Length
-    H = data.H;     % Step Height
-    q0 = data.q;   % Initial pose
-    
-    % Time Parameters
-    Ts = data.Ts;   % Sampling time
-    t0 = data.t0;   % Initial time
-    T = data.T;     % Total time. Time of the step
+  % Steps Data
+  L = data.L;     % Step Length
+  H = data.H;     % Step Height
+  q0 = data.q;   % Initial pose
 
-    % Variation of CoM and FF in Simple Support Phase
-    delta_ss_com = [delta.delta_CoM_SS1 delta.delta_CoM_SS2];
-    delta_ss_ff = [delta.delta_FF_SS1 delta.delta_FF_SS2];
+  % Time Parameters
+  Ts = data.Ts;   % Sampling time
+  t0 = data.t0;   % Initial time
+  T = data.T;     % Total time. Time of the step
 
-    % Variation of Right Hand and Left Hand in Simple Support Phase
-    delta_RH = delta.delta_RH;
-    delta_LH = delta.delta_LH;
+  % Variation of CoM and FF in Simple Support Phase
+  delta_ss_com = [delta.delta_CoM_SS1 delta.delta_CoM_SS2];
+  delta_ss_ff = [delta.delta_FF_SS1 delta.delta_FF_SS2];
+
+  % Variation of Right Hand and Left Hand in Simple Support Phase
+  delta_RH = delta.delta_RH;
+  delta_LH = delta.delta_LH;
+
+  % IK Parameters
+  ik_parameters.kp = data.kp;
+  ik_parameters.ko = data.ko;
+
+  humanoid_fields = humanoid_operational_fields(); 
 
     
-    humanoid_fields = humanoid_operational_fields(); 
-    
-    
-    % DOMINGO: Ya no va a haber Simple Support, Sólo Double and Simple
+  % DOMINGO: Ya no va a haber Simple Support, Sólo Double and Simple
     
 % switch data.DS_or_SS
-%     case 'Double and Simple' % Double Support followed by Simple Support movement
-      % Calculate the time of step's phases
-      alpha_ds = data.alpha_ds;   % Percentage of time for double support
-      alpha_ss = (1-alpha_ds);   % Percentage of time for simple support
-      Tinit = trajectory.time(end);
-      TDS1 = round_to_Ts(Tinit + alpha_ds*T/2, Ts); % Time for ending of Double Support Phase1
-      TSS = round_to_Ts(TDS1 + alpha_ss*T/2, Ts);   % Time for ending of Climbing Simple Phase 1
-      TDS2 = round_to_Ts(TSS + alpha_ss*T/2, Ts);  % Time for ending of Landing Simple Phase 1
-      Tend = round_to_Ts(TDS2 + alpha_ds*T/2, Ts); % Time for ending of Double Support Phase2
+% case 'Double and Simple' % Double Support followed by Simple Support movement
+    % Calculate the time of step's phases
+    alpha_ds = data.alpha_ds;   % Percentage of time for double support
+    alpha_ss = (1 - alpha_ds);   % Percentage of time for simple support
+    Tinit = trajectory.time(end);
+    TDS1 = round_to_Ts(Tinit + alpha_ds*T/2, Ts); % Time for ending of Double Support Phase1
+    TSS = round_to_Ts(TDS1 + alpha_ss*T/2, Ts);   % Time for ending of Climbing Simple Phase 1
+    TDS2 = round_to_Ts(TSS + alpha_ss*T/2, Ts);  % Time for ending of Landing Simple Phase 1
+    Tend = round_to_Ts(TDS2 + alpha_ds*T/2, Ts); % Time for ending of Double Support Phase2
 
-      % Variation of CoM in Double Support phase 1
-      delta_ds_com1 = delta.delta_CoM_DS1;
-      % Variation of CoM in Double Support phase 2
-      delta_ds_com2 = delta.delta_CoM_DS2;
+    % Variation of CoM in Double Support phase 1
+    delta_ds_com1 = delta.delta_CoM_DS1;
+    % Variation of CoM in Double Support phase 2
+    delta_ds_com2 = delta.delta_CoM_DS2;
 
-      % Insert Initial operational space positions in the trajectory
-      trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'RF');%(pose_quat2rpy(h.CoM_T_RF(q0)), Ts, Tinit), 'RF');
-      trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'LF');%(pose_quat2rpy(h.CoM_T_LF(q0)), Ts, Tinit), 'LF');
-      trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'RH');%(pose_quat2rpy(h.CoM_T_RH(q0)), Ts, Tinit), 'RH');
-      trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'LH');%(pose_quat2rpy(h.CoM_T_LH(q0)), Ts, Tinit), 'LH');
+    % Insert Initial operational space positions in the trajectory
+    trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'RF');%(pose_quat2rpy(h.CoM_T_RF(q0)), Ts, Tinit), 'RF');
+    trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'LF');%(pose_quat2rpy(h.CoM_T_LF(q0)), Ts, Tinit), 'LF');
+    trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'RH');%(pose_quat2rpy(h.CoM_T_RH(q0)), Ts, Tinit), 'RH');
+    trajectory = insert_trajectory(trajectory, humanoid_fields, create_trajectory_structure(zeros(6,1), Ts, Tinit), 'LH');%(pose_quat2rpy(h.CoM_T_LH(q0)), Ts, Tinit), 'LH');
 
-      % Generate trajectory for the first double support phase
-      [trajectory, d_trajectory, dd_trajectory] = move_double_support (delta_ds_com1, Ts, [Tinit; TDS1], trajectory, d_trajectory, dd_trajectory,delta.interpola_CoM_DS1);
+    % Generate trajectory for the first double support phase
+    [trajectory, d_trajectory, dd_trajectory] = move_double_support (delta_ds_com1, Ts, [Tinit; TDS1], trajectory, d_trajectory, dd_trajectory,delta.interpola_CoM_DS1);
 
-      % Generate trajectory for the simple support phase
-      [trajectory, d_trajectory, dd_trajectory] = move_simple_support (delta_ss_com, delta_ss_ff, Ts, [TDS1; TSS; TDS2], trajectory, d_trajectory, dd_trajectory, support_foot, delta.interpola_CoM_SS, delta.interpola_FF_SS); % Support on Right foot
+    % Generate trajectory for the simple support phase
+    [trajectory, d_trajectory, dd_trajectory] = move_simple_support (delta_ss_com, delta_ss_ff, Ts, [TDS1; TSS; TDS2], trajectory, d_trajectory, dd_trajectory, support_foot, delta.interpola_CoM_SS, delta.interpola_FF_SS); % Support on Right foot
 
-      % Generate trajectory for the first double support phase
-      [trajectory, d_trajectory, dd_trajectory] = move_double_support (delta_ds_com2, Ts, [TDS2; Tend], trajectory, d_trajectory, dd_trajectory,delta.interpola_CoM_DS1);
+    % Generate trajectory for the first double support phase
+    [trajectory, d_trajectory, dd_trajectory] = move_double_support (delta_ds_com2, Ts, [TDS2; Tend], trajectory, d_trajectory, dd_trajectory,delta.interpola_CoM_DS1);
 
-      % Generate trajectory for the arms
-      [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('RH', delta_RH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory, delta.interpola_RH);
-      [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('LH', delta_LH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory, delta.interpola_RH);
-      
-      % Inverse Differential Kinematics Algorithm with left foot
-      [q, dq, ddq] = inverse_ds_ss_jacobian_quat(q0, trajectory, d_trajectory, h);
-      %[q, dq, ddq] = inverse_ds_ss_jacobian_quat_second_order(q0, trajectory, d_trajectory, dd_trajectory, h);
-        
+    % Generate trajectory for the arms
+    [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('RH', delta_RH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory, delta.interpola_RH);
+    [trajectory, d_trajectory, dd_trajectory] = move_arm_simple_support ('LH', delta_LH, Ts, [Tinit; TDS1; TSS; TDS2; Tend], trajectory, d_trajectory, dd_trajectory, delta.interpola_RH);
+
+    % Inverse Differential Kinematics Algorithm
+    [q, dq, ddq] = inverse_ds_ss_jacobian_quat(q0, trajectory, d_trajectory, h, ik_parameters);
+    %[q, dq, ddq] = inverse_ds_ss_jacobian_quat_second_order(q0, trajectory, d_trajectory, dd_trajectory, h);
+
 %     case 'Simple' % Only Simple Support movement
 %         
 %         alpha_ds = 0;

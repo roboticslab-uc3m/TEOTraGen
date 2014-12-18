@@ -107,7 +107,8 @@ InitialSupportLeg = 'Right';
 % IK POSITION GAIN
 % #################
 
-kp = 0.01;
+% kp = 0.01;
+kp = 20;
 
 
 
@@ -115,7 +116,8 @@ kp = 0.01;
 % IK ORIENTATION GAIN
 % ####################
 
-ko = pi/8;
+% ko = pi/8;
+ko = 1;
 
 
 
