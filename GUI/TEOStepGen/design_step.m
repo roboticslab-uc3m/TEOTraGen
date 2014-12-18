@@ -106,17 +106,17 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
     end
 
     if isfield(handles.GUIConfig, 'kp'),
-      handles.parameters.kp = handles.GUIConfig.kp;
+      handles.Input_data.kp = handles.GUIConfig.kp;
     else
-%       handles.parameters.kp = 0.01;
-      handles.parameters.kp = 20;
+%       handles.Input_data.kp = 0.01;
+      handles.Input_data.kp = 20;
     end
     
     if isfield(handles.GUIConfig, 'ko'),
-      handles.parameters.ko = handles.GUIConfig.ko;
+      handles.Input_data.ko = handles.GUIConfig.ko;
     else
-%       handles.parameters.ko = pi/8;
-      handles.parameters.ko = 1;
+%       handles.Input_data.ko = pi/8;
+      handles.Input_data.ko = 1;
     end
         
     
@@ -411,8 +411,8 @@ data.gamma_com = handles.Input_data.gamma_com;    % Percentage of the total time
 data.L = handles.Input_data.L_val;              % Length of the step (X direction)
 data.H = handles.Input_data.H_val;              % Height of the step (Z direction)
 
-data.kp = handles.parameters.kp;
-data.ko = handles.parameters.ko;
+data.kp = handles.Input_data.kp;
+data.ko = handles.Input_data.ko;
 
     
 % Delta Data
@@ -930,7 +930,7 @@ function change_parameters_Callback(hObject, eventdata, handles)
 
 function ik_gains_Callback(hObject, eventdata, handles)
 % Change the values of gains
-[handles.parameters.kp handles.parameters.ko] = change_ik_gains(handles.parameters.kp, handles.parameters.ko);
+[handles.Input_data.kp handles.Input_data.ko] = change_ik_gains(handles.Input_data.kp, handles.Input_data.ko);
 guidata(hObject,handles);
 
 

@@ -122,15 +122,15 @@ function steps_control_OpeningFcn(hObject, eventdata, handles, varargin)
   end
 
   if isfield(handles.GUIConfig, 'kp'),
-    handles.parameters.kp = handles.GUIConfig.kp;
+    handles.Input_data.kp = handles.GUIConfig.kp;
   else
-    handles.parameters.kp = 0.01;
+    handles.Input_data.kp = 0.01;
   end
 
   if isfield(handles.GUIConfig, 'ko'),
-    handles.parameters.ko = handles.GUIConfig.ko;
+    handles.Input_data.ko = handles.GUIConfig.ko;
   else
-    handles.parameters.ko = pi/8;
+    handles.Input_data.ko = pi/8;
   end
   
   set(handles.editAlphaDS,'String',num2str(handles.Input_data.alpha_ds));

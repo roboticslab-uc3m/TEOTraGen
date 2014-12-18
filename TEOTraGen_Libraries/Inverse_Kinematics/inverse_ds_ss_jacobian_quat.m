@@ -14,7 +14,7 @@ function [q, dq, ddq] = inverse_ds_ss_jacobian_quat(q0, trajectory, d_trajectory
 %
 %   NOTE: This algorithm doesn't allow to control velocities neither accelerations
 %   TODO: Return accelerations (ddq) considering velocities (dq) diff.
-%   TODO2: It doesn't consider arms and CoM movement yet
+%   TODO2: It doesn't consider CoM movement yet
 %   See also INVERSE_DS_SS_JACOBIAN_QUAT.
 
 %   Author: Domingo Esteban
@@ -35,7 +35,8 @@ function [q, dq, ddq] = inverse_ds_ss_jacobian_quat(q0, trajectory, d_trajectory
                 %%%     INVERSE_DS_SS_JACOBIAN_QUAT    %%%
                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-                
+
+% Default gains parameters
 if nargin < 5,
   parameters.kp = 20;
   parameters.ko = 1;
@@ -46,26 +47,26 @@ end
 % Jacobian with unit quaternions)
 
 % Parameters and Variables needed
-  L = length(trajectory.time);
-  q  = zeros(size(q0,1), L);
-  dq = zeros(size(q0,1), L);
-%     ddq = zeros(size(q0,1), L); % Return accelerations (ddq) considering
-%     velocities (dq) diff, at bottom
-  Ts = trajectory.Ts;
+L = length(trajectory.time);
+q  = zeros(size(q0,1), L);
+dq = zeros(size(q0,1), L);
+% ddq = zeros(size(q0,1), L); % Return accelerations (ddq) considering
+% velocities (dq) diff, at bottom
+Ts = trajectory.Ts;
 
 % Position and Orientation Gain
-    Kp = parameters.kp;
-    Ko = parameters.ko;
+Kp = parameters.kp;
+Ko = parameters.ko;
     
 % Errors Preallocation
-    e_p_LF = zeros(3,L);
-    e_o_LF = zeros(3,L);
-    e_p_RF = zeros(3,L);
-    e_o_RF = zeros(3,L);
-    e_p_RH = zeros(3,L);
-    e_o_RH = zeros(3,L);
-    e_p_LH = zeros(3,L);
-    e_o_LH = zeros(3,L);
+e_p_LF = zeros(3,L);
+e_o_LF = zeros(3,L);
+e_p_RF = zeros(3,L);
+e_o_RF = zeros(3,L);
+e_p_RH = zeros(3,L);
+e_o_RH = zeros(3,L);
+e_p_LH = zeros(3,L);
+e_o_LH = zeros(3,L);
 
     
 % Initial positions
@@ -78,7 +79,7 @@ CoM_p0_LH = pose_quat2rpy(h.CoM_T_LH(q0));
 
 
 % Initial configuration
-    q(:,1) = q0;
+q(:,1) = q0;
     
 
 for jj = 1:L-1
@@ -173,7 +174,6 @@ end
 % Joints Acceleration
 ddq = [diff(dq,1,2) zeros(size(dq,1),1)]/Ts;
 
-
 end
 
 
@@ -186,7 +186,7 @@ function x_next = integrate_vector (x, dx, Ts)
 x_next = x + dx * Ts;
 end
 
-function [error_p error_o] = determine_error (pd, p)
+function [error_p, error_o] = determine_error (pd, p)
 % Return position and orientation errors
 desired_pose = pose_rpy2quat(pd);
 real_pose = pose_rpy2quat(p);
