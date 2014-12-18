@@ -24,7 +24,7 @@ else
   
   
   % Add N ZMP values at the end
-  desired_zmp = [desired_zmp repmat(desired_zmp(:,end),1,N)];
+  desired_zmp = [desired_zmp repmat(desired_zmp(:,end), 1, N)];
   
   
   K = length(desired_zmp);
@@ -72,15 +72,15 @@ else
     Qe = 1;
     Qx = zeros(3,3);
 
-    Q = [Qe zeros(1,3);zeros(3,1) Qx];
+    Q = [Qe zeros(1,3); zeros(3,1) Qx];
     R = 1e-6;
 
     % P = solution of DARE, G = optimal gain
-    [P,L,G] = dare(A1,B1,Q,R);
+    [P, L, G] = dare(A1, B1, Q, R);
 
     % Optimal gain from DARE
-    Ke = G(1,1);
-    Kx = G(1,2:end);
+    Ke = G(1, 1);
+    Kx = G(1, 2:end);
 
 
     Ac = A1-B1*G;
