@@ -1262,7 +1262,7 @@ guidata(hObject,handles)
 
 
 % --------------------------------------------------------------------
-function ang_vel_acc_save_teo_13_joints_csv_menu_Callback(hObject, eventdata, handles)
+function ang_vel_acc_save_teo_14_joints_csv_menu_Callback(hObject, eventdata, handles)
 if isstruct(handles.result)
   Q = handles.result.q;
   dQ = handles.result.dq;
@@ -1318,36 +1318,36 @@ if isstruct(handles.result)
   ddQ(25,:) = -ddQ(25,:);
   
   try
-  [file1,path] = uiputfile('*.csv','Save Joint Angles as');
-  csvid = fopen(file1, 'w');
+  [file1, path1] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(strcat(path1,file1), 'w');
 %     fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
 %                                                                                        [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
-    fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
-                                                                                       [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
+  fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+                                                                                       [Q(13,:); Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
   fclose(csvid);
   catch
     disp('Save joint angles *.csv aborted');
   end
 
   try
-    [file2,path] = uiputfile('*.csv','Save Joint Velocities as');
-    csvid = fopen(file2, 'w');
+    [file2, path2] = uiputfile('*.csv','Save Joint Velocities as');
+    csvid = fopen(strcat(path2,file2), 'w');
 %   fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
 %                                                                                      [dQ(7,:); dQ(8,:); dQ(9,:); dQ(10,:); dQ(11,:); dQ(12,:); dQ(14,:); dQ(1,:); dQ(2,:); dQ(3,:); dQ(4,:); dQ(5,:); dQ(6,:)]);
-    fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
-                                                                                     [dQ(7,:); dQ(8,:); dQ(9,:); dQ(10,:); dQ(11,:); dQ(12,:); dQ(14,:); dQ(1,:); dQ(2,:); dQ(3,:); dQ(4,:); dQ(5,:); dQ(6,:)]);
+    fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+                                                                                     [dQ(13,:); dQ(7,:); dQ(8,:); dQ(9,:); dQ(10,:); dQ(11,:); dQ(12,:); dQ(14,:); dQ(1,:); dQ(2,:); dQ(3,:); dQ(4,:); dQ(5,:); dQ(6,:)]);
     fclose(csvid);
   catch
     disp('Save joint velocities *.csv aborted');
   end
 
   try
-    [file3,path] = uiputfile('*.csv','Save Joint Accelerations as');
-    csvid = fopen(file3, 'w');
+    [file3, path3] = uiputfile('*.csv','Save Joint Accelerations as');
+    csvid = fopen(strcat(path3,file3), 'w');
 %   fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
 %                                                                                      [ddQ(7,:); ddQ(8,:); ddQ(9,:); ddQ(10,:); ddQ(11,:); ddQ(12,:); ddQ(14,:); ddQ(1,:); ddQ(2,:); ddQ(3,:); ddQ(4,:); ddQ(5,:); ddQ(6,:)]);
-    fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
-                                                                                     [ddQ(7,:); ddQ(8,:); ddQ(9,:); ddQ(10,:); ddQ(11,:); ddQ(12,:); ddQ(14,:); ddQ(1,:); ddQ(2,:); ddQ(3,:); ddQ(4,:); ddQ(5,:); ddQ(6,:)]);
+    fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
+                                                                                     [ddQ(13,:); ddQ(7,:); ddQ(8,:); ddQ(9,:); ddQ(10,:); ddQ(11,:); ddQ(12,:); ddQ(14,:); ddQ(1,:); ddQ(2,:); ddQ(3,:); ddQ(4,:); ddQ(5,:); ddQ(6,:)]);
     fclose(csvid);
   catch
     disp('Save joint accelerations *.csv aborted');
@@ -1359,7 +1359,7 @@ end
 
 
 % --------------------------------------------------------------------
-function angles_save_teo_13_joints_csv_menu_Callback(hObject, eventdata, handles)
+function angles_save_teo_14_joints_csv_menu_Callback(hObject, eventdata, handles)
 global trajectories
 if isstruct(handles.result)
   Q = handles.result.q;  
@@ -1396,12 +1396,12 @@ if isstruct(handles.result)
   Q(25,:) = -Q(25,:);
   
   try
-  [file,path] = uiputfile('*.csv','Save Joint Angles as');
-  csvid = fopen(file, 'w');
+  [file1, path1] = uiputfile('*.csv','Save Joint Angles as');
+  csvid = fopen(strcat(path1,file1), 'w');
 %   fprintf(csvid, '%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n',...
 %                                                                                      [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
-  fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
-                                                                                     [Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
+  fprintf(csvid, '%f %f %f %f %f %f %f %f %f %f %f %f %f %f\n',...
+                                                                                     [Q(13,:); Q(7,:); Q(8,:); Q(9,:); Q(10,:); Q(11,:); Q(12,:); Q(14,:); Q(1,:); Q(2,:); Q(3,:); Q(4,:); Q(5,:); Q(6,:)]);
   fclose(csvid);
   catch
       disp('Save joint angles *.csv aborted');
