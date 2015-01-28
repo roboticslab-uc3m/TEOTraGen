@@ -1,4 +1,4 @@
-function Config = TEOStepGenConfig( input_args )
+function Config = TEOStepGenConfig(  )
 %GETTEOSTEPGENCONFIG Summary of this function goes here
 %   Default parameters:
 %   - q0: Teo Initial Configuration

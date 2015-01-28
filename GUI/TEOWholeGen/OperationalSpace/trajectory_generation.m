@@ -84,23 +84,23 @@ set([handles.diff_pos_button handles.abs_pos_button handles.diff_orient_button h
 set(handles.Ts_val,'String', data.trajectory_settings.parameters.Ts);
 
 % Enable/Disable generation for corresponding humanoid part
-if data.trajectory_settings.body_parts.CoM == 0
+if data.trajectory_settings.body_parts.CoM == 0,
   set(handles.CoM_button,'Enable','off');
   disp('Disable CoM generation');
 end
-if data.trajectory_settings.body_parts.RF == 0
+if data.trajectory_settings.body_parts.RF == 0,
   set(handles.RF_button,'Enable','off');
   disp('Disable RF generation');
 end
-if data.trajectory_settings.body_parts.LF == 0
+if data.trajectory_settings.body_parts.LF == 0,
   set(handles.LF_button,'Enable','off');
   disp('Disable LF generation');
 end
-if data.trajectory_settings.body_parts.RH == 0
+if data.trajectory_settings.body_parts.RH == 0,
   set(handles.RH_button,'Enable','off');
   disp('Disable RH generation');
 end
-if data.trajectory_settings.body_parts.LH == 0
+if data.trajectory_settings.body_parts.LH == 0,
   set(handles.LH_button,'Enable','off');
   disp('Disable LH generation');
 end
@@ -374,6 +374,8 @@ guidata(hObject,handles)
 
 
 function gen_joint_button_Callback(hObject, eventdata, handles)
+
+%
 set(handles.save_operational_button,'ForegroundColor','black');
 set(handles.label_points,'String','Calculating Inverse kinematics. Please wait...');
 set(handles.label_points,'BackGroundColor',[1 1 0.2]);

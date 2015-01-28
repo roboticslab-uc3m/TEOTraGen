@@ -83,6 +83,9 @@ q(:,1) = q0;
     
 
 for jj = 1:L-1
+  if jj == 125
+    disp('borrarXDTS');
+  end
   % Inverse differential kinematics for Legs
   switch trajectory.SF(jj)
     case 0      % double support
