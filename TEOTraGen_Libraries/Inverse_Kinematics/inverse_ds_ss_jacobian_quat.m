@@ -83,9 +83,6 @@ q(:,1) = q0;
     
 
 for jj = 1:L-1
-  if jj == 125
-    disp('borrarXDTS');
-  end
   % Inverse differential kinematics for Legs
   switch trajectory.SF(jj)
     case 0      % double support
@@ -151,7 +148,7 @@ for jj = 1:L-1
       dq(7:12, jj) = invert_kinematics_standard (q(:,jj), h.w_J_LF, u_L, 1:6, 1:6);
       
   end
-    
+
   % Inverse differential kinematics for Torso -> We assume it doesn't move
   dq(13:14, jj) = 0;
   

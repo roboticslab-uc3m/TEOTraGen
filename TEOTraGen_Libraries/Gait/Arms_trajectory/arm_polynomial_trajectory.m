@@ -17,8 +17,8 @@ else
   end
 end
 
-polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_viapoints_trajectory'));
-% polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_segments_trajectory'));
+% polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_viapoints_trajectory'));
+polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_segments_trajectory'));
 
 
 % Total variation between initial and final footprint

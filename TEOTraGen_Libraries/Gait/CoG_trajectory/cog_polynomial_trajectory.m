@@ -16,8 +16,8 @@ else
     error('ErrorTEOTraGen:optNoImplemented', 'This degree is still not implemented.');
   end
 end
-polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_viapoints_trajectory'));
-% polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_segments_trajectory'));
+% polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_viapoints_trajectory'));
+polynomial_trajectory = str2func(strcat('poly', num2str(degree), '_segments_trajectory'));
 
 % Extract the total variation
 total_delta = (next_footprint - prev_footprint)/2;
