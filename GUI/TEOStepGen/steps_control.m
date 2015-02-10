@@ -22,7 +22,7 @@ function varargout = steps_control(varargin)
 
 % Edit the above text to modify the response to help steps_control
 
-% Last Modified by GUIDE v2.5 15-Dec-2014 20:39:30
+% Last Modified by GUIDE v2.5 09-Feb-2015 17:36:35
 
 
 
@@ -358,3 +358,7 @@ function editGammaCOM_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+function pushbutton_back_Callback(hObject, eventdata, handles)
+TEOStepGen;
+close(handles.figureStepsControl)

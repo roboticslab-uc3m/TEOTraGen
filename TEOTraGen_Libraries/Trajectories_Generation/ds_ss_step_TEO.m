@@ -51,7 +51,7 @@ function [q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(
   humanoid_fields = humanoid_operational_fields(); 
 
     
-  % DOMINGO: Ya no va a haber Simple Support, Sólo Double and Simple
+  % D.E.: Ya no va a haber Simple Support, Sólo Double and Simple
     
 % switch data.DS_or_SS
 % case 'Double and Simple' % Double Support followed by Simple Support movement
@@ -61,8 +61,8 @@ function [q, dq, ddq, trajectory, d_trajectory, dd_trajectory] = ds_ss_step_TEO(
     Tinit = trajectory.time(end);
     TDS1 = round_to_Ts(Tinit + alpha_ds*T/2, Ts); % Time for ending of Double Support Phase1
     TSS = round_to_Ts(TDS1 + alpha_ss*T/2, Ts);   % Time for ending of Climbing Simple Phase 1
-    TDS2 = round_to_Ts(TSS + alpha_ss*T/2, Ts);  % Time for ending of Landing Simple Phase 1
-    Tend = round_to_Ts(TDS2 + alpha_ds*T/2, Ts); % Time for ending of Double Support Phase2
+    TDS2 = round_to_Ts(TSS + alpha_ss*T/2, Ts);   % Time for ending of Landing Simple Phase 1
+    Tend = round_to_Ts(TDS2 + alpha_ds*T/2, Ts);  % Time for ending of Double Support Phase2
 
     % Variation of CoM in Double Support phase 1
     delta_ds_com1 = delta.delta_CoM_DS1;

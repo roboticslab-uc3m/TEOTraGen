@@ -26,8 +26,6 @@ if nargout
 else
 	gui_mainfcn(gui_State, varargin{:});
 end
-% End initialization code - DO NOT EDIT
-
 
 % --- Executes just before design_step is made visible.
 function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -49,18 +47,39 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
     if isfield(handles.GUIConfig, 'q0'),
       handles.Input_data.q0 = handles.GUIConfig.q0;
     else
-      % -0.01 M
-      %   handles.Input_data.q0 = [ 0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Right Leg
-      %                     0; 0; -0.1716; 0.3605; -0.1889; 0; ... % Left Leg                   
-      %                     0; 0;...                                                                                                                  % Waist
-      %                     0.420000000000000; -0.167017153300893; 0; -1.250000000000000; 0; 0; ...                                                   % Right Arm
-      %                     0.420000000000000; 0.167017153300893; 0; -1.250000000000000; 0; 0];                                                       % Left Arm ;
-      % -0.025 M   
-      handles.Input_data.q0 = [  0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Right Leg
-                                 0; 0; -0.2417; 0.5081; -0.2664; 0; ...                                  % Left Leg 
-                                 0; 0; ...                                                               % Waist
-                                 0.42; -0.167017153300893; 0; -1.25; 0; 0; ... % Right Arm
-                                 0.42; 0.167017153300893; 0; -1.25; 0; 0];     % Left Arm
+      handles.Input_data.q0 =   [ ...
+                                  % Right Leg
+                                  0;                    ... % Right Hip Yaw
+                                  0;                    ... % Right Hip Roll
+                                  -0.2701;              ... % Right Hip Pitch
+                                  0.5680;               ... % Right Knee Pitch
+                                  -0.2979;              ... % Right Ankle Pitch
+                                  0;                    ... % Right Ankle Roll
+                                  % Left Leg 
+                                  0;                    ... % Left Hip Yaw
+                                  0;                    ... % Left Hip Roll 
+                                  -0.2701;              ... % Left Hip Pitch
+                                  0.5680;               ... % Left Knee Pitch
+                                  -0.2979;              ... % Left Ankle Pitch
+                                  0;                    ... % Left Ankle Roll
+                                  % Torso
+                                  0;                    ... % Torso Yaw
+                                  0;                    ... % Torso Pitch
+                                  % Right Arm
+                                  0.420000000000000;    ... % Right Shoulder Pitch
+                                  -0.167017153300893;   ... % Right Shoulder Roll
+                                  0;                    ... % Right Shoulder Yaw
+                                  -1.250000000000000;   ... % Right Elbow Pitch
+                                  0;                    ... % Right Wrist Yaw
+                                  0;                    ... % Right Wrist Pitch
+                                  % Left Arm
+                                  0.420000000000000;    ... % Left Shoulder Pitch
+                                  0.167017153300893;    ... % Left Shoulder Roll
+                                  0;                    ... % Left Shoulder Yaw
+                                  -1.250000000000000;   ... % Left Elbow Pitch
+                                  0;                    ... % Left Wrist Yaw
+                                  0                     ... % Left Wrist Pitch
+                                  ];
     end
 
     if isfield(handles.GUIConfig, 'alpha_ds'),
@@ -78,7 +97,7 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
     if isfield(handles.GUIConfig, 'L_val'),
       handles.Input_data.L_val = handles.GUIConfig.L_val;
     else
-      handles.Input_data.L_val    = 0.1;
+      handles.Input_data.L_val = 0.1;
     end
 
     if isfield(handles.GUIConfig, 'H_val'),
@@ -241,22 +260,16 @@ function design_step_OpeningFcn(hObject, eventdata, handles, varargin)
   % handles.axes_zmp = axes('Parent',hpanel(6),'Position',[.2 .2 .6 .6]);
   % handles.axes_robot_plot = axes('Parent',hpanel(6),'Position',[.2 .2 .6 .6]);
    
-  % Ejes para mostrar la imagen de TEO
+  % Axes to TEO picture visualization
   axes(handles.sd_graph)
-  % [r,map] = imread('teo_photo2.jpg','jpg');
   [r,map] = imread('TEO-face-background.png','png');
   image(r); colormap(map); 
   text(150,200,'Please, click the humanoid part','HorizontalAlignment','center','Color','w','BackgroundColor',[.0 .0 .0]);
   text(150,250,'to display/hide the joint plots','HorizontalAlignment','center','Color','w','BackgroundColor',[.0 .0 .0]);
   axis off
 
-%   axes(handles.axes_zmp)
-%   [r,map] = imread('teo_photo2.jpg','jpg');
-%   image(r); colormap(map); axis off
-
   % Update handles structure
   guidata(hObject, handles);
-
   % UIWAIT makes design_step wait for user response (see UIRESUME)
   % uiwait(handles.figure1);
 
@@ -322,7 +335,6 @@ switch support_foot
     delta = h.CoM_T_RF(q);
 %     delta_P(1,:) = (2*delta(1) + (TEO.legs.right.foot.limits.x(1) + TEO.legs.right.foot.limits.x(2)));
 %     delta_P(2,:) = (2*delta(2) + (TEO.legs.right.foot.limits.y(1) + TEO.legs.right.foot.limits.y(2)));
-
 %     delta_P(1,:) = delta(1) + TEO.legs.right.foot.limits.x(1) + TEO.legs.right.foot.limits.x(2);
     delta_P(2,:) = delta(2) + TEO.legs.right.foot.limits.y(1) + TEO.legs.right.foot.limits.y(2);
 
@@ -330,7 +342,6 @@ switch support_foot
     delta = h.CoM_T_LF(q);
 %     delta_P(1,:) = (2*delta(1) + (TEO.legs.left.foot.limits.x(1) + TEO.legs.left.foot.limits.x(2)));
 %     delta_P(2,:) = (2*delta(2) + (TEO.legs.left.foot.limits.y(1) + TEO.legs.left.foot.limits.y(2)));
-
 %     delta_P(1,:) = delta(1) + TEO.legs.left.foot.limits.x(1) + TEO.legs.left.foot.limits.x(2);
     delta_P(2,:) = delta(2) + TEO.legs.left.foot.limits.y(1) + TEO.legs.left.foot.limits.y(2);
 
@@ -407,7 +418,7 @@ data.q0 = handles.Input_data.q0;
 data.T = handles.Input_data.T_val;              % Total time. Time of the step
 
 data.alpha_ds = handles.Input_data.alpha_ds;    % Percentage of the total time for double support
-data.gamma_com = handles.Input_data.gamma_com;    % Percentage of the total time for support foot ???
+data.gamma_com = handles.Input_data.gamma_com;  % Percentage of the total time for support foot ???
 data.L = handles.Input_data.L_val;              % Length of the step (X direction)
 data.H = handles.Input_data.H_val;              % Height of the step (Z direction)
 
@@ -417,12 +428,12 @@ data.ko = handles.Input_data.ko;
     
 % Delta Data
 global delta
-  delta.delta_CoM_DS1 = [str2double(get(handles.delta_x_CoM_DS1,'String'));...      % Variation of the CoM in the Double Support phase 1
+  delta.delta_CoM_DS1 = [str2double(get(handles.delta_x_CoM_DS1,'String'));...    % Variation of the CoM in the Double Support phase 1
       str2double(get(handles.delta_y_CoM_DS1,'String'));... 
       str2double(get(handles.delta_z_CoM_DS1,'String'));...
       zeros(2,1);...
       str2double(get(handles.delta_yaw_CoM_DS1,'String'))];
-  delta.interpola_CoM_DS1 = handles.interpola_DS1;                                  % Interpolation for the CoM in the Double Support phase 1
+  delta.interpola_CoM_DS1 = handles.interpola_DS1;                                % Interpolation for the CoM in the Double Support phase 1
 
   delta.delta_CoM_SS1 = [str2double(get(handles.delta_x_CoM_SS1,'String'));...    % Variation of the CoM in the Simple Support phase 1
       str2double(get(handles.delta_y_CoM_SS1,'String'));...
@@ -449,12 +460,12 @@ global delta
       str2double(get(handles.delta_yaw_FF_SS2,'String'))];
   delta.interpola_FF_SS = handles.interpola_SS_ff;                                % Interpolation for the Floating Foot in the Simple Support phase (1 and 2)
 
-  delta.delta_CoM_DS2 = [str2double(get(handles.delta_x_CoM_DS2,'String'));...      % Variation of the CoM in the Double Support phase 2
+  delta.delta_CoM_DS2 = [str2double(get(handles.delta_x_CoM_DS2,'String'));...    % Variation of the CoM in the Double Support phase 2
       str2double(get(handles.delta_y_CoM_DS2,'String'));... 
       str2double(get(handles.delta_z_CoM_DS2,'String'));
       zeros(2,1);...
       str2double(get(handles.delta_yaw_CoM_DS2,'String'))];
-  delta.interpola_CoM_DS2 = handles.interpola_DS2;                                  % Interpolation for the CoM in the Double Support phase 2
+  delta.interpola_CoM_DS2 = handles.interpola_DS2;                                % Interpolation for the CoM in the Double Support phase 2
 
   delta.delta_RH = [str2double(get(handles.delta_x_RH,'String'));...              % Variation of the Right Hand in the DS and SS phase
       str2double(get(handles.delta_y_RH,'String'));...
@@ -477,7 +488,7 @@ support_foot = handles.support_foot;
 if ~isstruct(handles.result)
   % CREATE TRAJECTORY
     % Fields corresponding to the operational space of TEO
-    TEO_fields = humanoid_operational_fields(); 
+    TEO_fields = humanoid_operational_fields();
 
     % Creates the trajectories structures
     trajectory = create_trajectory_template (TEO_fields, data.Ts);
