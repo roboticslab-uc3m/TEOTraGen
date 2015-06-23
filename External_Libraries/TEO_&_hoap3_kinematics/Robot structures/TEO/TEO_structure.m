@@ -308,7 +308,7 @@ else
   legs.right.joint(6).origin  = legs.right.joint(5).origin;
   
   legs.right.joint(1).orientation  = ID;
-  legs.right.joint(2).orientation  = [0, 0, 1; 1, 0, 0; 0, 1, 0]; %DOMINGO: ANTES: [0, 1, 0; 0, 0, 1; 1, 0, 0];
+  legs.right.joint(2).orientation  = [0, 0, 1; 1, 0, 0; 0, 1, 0]; %D.E.: ANTES: [0, 1, 0; 0, 0, 1; 1, 0, 0];
   legs.right.joint(3).orientation  = [0, -1, 0; 0, 0, 1; -1, 0, 0];   
   legs.right.joint(4).orientation  = [0, -1, 0; 0, 0, 1; -1, 0, 0];
   legs.right.joint(5).orientation  = [0, -1, 0; 0, 0, 1; -1, 0, 0];
@@ -325,10 +325,10 @@ else
   % Rototranslation w.r.t. the robot ankle
   legs.right.foot.origin = legs.right.joint(6).origin + [0; 0; -legs.link_lengths(5)];
   legs.right.foot.orientation = ID;
-  legs.right.foot.limits.x    = [-40, 68]; %DOMINGO: Verificar
-  legs.right.foot.limits.y    = [-41.5, 31.5]; %DOMINGO: Verificar
+  legs.right.foot.limits.x    = [-70, 175];
+  legs.right.foot.limits.y    = [-71.064, 71.064];
   
-  % Left Leg
+  % Left Leg 
   % Rototranslation w.r.t. the waist joint
   legs.left.joint(1).origin  = waist.joint(1).origin + [-waist.link_lengths(1); legs.link_lengths(1); -waist.link_lengths(2)];
   legs.left.joint(2).origin  = legs.left.joint(1).origin;
@@ -346,8 +346,8 @@ else
   % Rototranslation w.r.t. the robot ankle
   legs.left.foot.origin  = legs.left.joint(6).origin + [0; 0; -legs.link_lengths(5)];
   legs.left.foot.orientation  = legs.right.foot.orientation;
-  legs.left.foot.limits.x     = [-40, 68];
-  legs.left.foot.limits.y     = [-31.5, 41.5];
+  legs.left.foot.limits.x     = [-70, 175];
+  legs.left.foot.limits.y     = [-71.064, 71.064];
 
   % IMU
   % Rototranslation w.r.t. the robot center
