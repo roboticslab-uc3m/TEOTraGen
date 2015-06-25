@@ -26,22 +26,41 @@ try
   q(20,:) = -q(20,:);
   q(23,:) = -q(23,:);
   q(25,:) = -q(25,:);
+  
+  %Current save format:
+  %The q vector sorting standard at june/2015 is as follows:
+  %head group 0 / joints yaw=0.0, pitch=0.1
+  %right arm (from robot pov) group 1 / joints from shoulder to hand 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6
+  %left arm (from robot pov) group 2 / joints from shoulder to hand 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6
+  %torso group 3 / joints yaw=3.0, pitch=3.1
+  %left leg (from robot pov) group 4 / joints from shoulder to hand 4.0, 4.1, 4.2, 4.3, 4.4, 4.5
+  %left leg (from robot pov) group 5 / joints from shoulder to hand 5.0, 5.1, 5.2, 5.3, 5.4, 5.5
+  %vector sorting is then:
+  %[  0.0, 0.1, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6 ] for manipulation control
+  %[  3.0, 3.1, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5 ] for locomotion control
+  %theta (q) correpondence:
+  %[  27, 28, 15, 16, 17, 18, 19, 20, *no q for grasper, 21, 22, 23, 24, 25, 26, *no q for grasper ] for manipulation control
+  %[  13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] for locomotion control
 
   % LEGS FILE
-  [file1, path1] = uiputfile([traj_name_string '_legs_q.csv'], 'Save Joint Angles as');
-  
+  %[file1, path1] = uiputfile([traj_name_string '.csv'], 'Save Joint Angles for locomotion as');
+  file1='teo_step.csv';
+  path1='/home/rh2/locomotion/';
   csvid = fopen(strcat(path1,file1), 'w');
   fprintf(csvid, '%.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f\n',...
-                                                                                     [q(13,:); q(7,:); q(8,:); q(9,:); q(10,:); q(11,:); q(12,:); q(14,:); q(1,:); q(2,:); q(3,:); q(4,:); q(5,:); q(6,:)]);
+  [q(13,:); q(14,:); q(1,:); q(2,:); q(3,:); q(4,:); q(5,:); q(6,:); q(7,:); q(8,:); q(9,:); q(10,:); q(11,:); q(12,:)]);
   fclose(csvid);
 
   
   % ARMS FILE
-  [file2, path2] = uiputfile([traj_name_string '_arms_q.csv'], 'Save Joint Angles as');
-
+  %[file2, path2] = uiputfile([traj_name_string '.csv'], 'Save Joint Angles for manipulation as');
+  file2='teo_step.csv';
+  path2='/home/rh2/manipulation/';
+  q_size = size(q);
+  q_zerovalues =  zeros(1,q_size(2));
   csvid = fopen(strcat(path2,file2), 'w');
-  fprintf(csvid, '%.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f\n',...
-                                                                                     [q(15,:); q(16,:); q(17,:); q(18,:); q(19,:); q(20,:); q(21,:); q(22,:); q(23,:); q(24,:); q(25,:); q(26,:)]);
+  fprintf(csvid, '%.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f %.6f\n',...
+  [q_zerovalues; q_zerovalues; q(15,:); q(16,:); q(17,:); q(18,:); q(19,:); q(20,:); q_zerovalues ; q(21,:); q(22,:); q(23,:); q(24,:); q(25,:); q(26,:); q_zerovalues ]);
   fclose(csvid);
   
   
